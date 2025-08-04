@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kortex</title>
+  <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    body {
+      height: 100vh;
+      display: flex; justify-content: center; align-items: center;
+      background: linear-gradient(135deg, #2b5876, #4e4376);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 40px 60px;
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      max-width: 400px;
+      width: 100%;
+    }
+    h1 {
+      font-weight: 700;
+      margin-bottom: 15px;
+      font-size: 2.5rem;
+    }
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      color: #e0e0e0;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 28px;
+      font-size: 1rem;
+      color: #fff;
+      background: #6c63ff;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s ease, transform 0.3s ease;
+      box-shadow: 0 4px 15px rgba(108, 99, 255, 0.4);
+    }
+    .btn:hover {
+      background: #5848c2;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(88, 72, 194, 0.6);
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px 20px;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      p {
+        font-size: 1rem;
+      }
+      .btn {
+        padding: 10px 22px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Kortex’e Hoşgeldin!</h1>
+    <p>Bu benim modern, ücretsiz ve şık web sitem.</p>
+    <a href="https://discord.com/oauth2/authorize?client_id=1234&scope=bot" class="btn" target="_blank" rel="noopener noreferrer">Discord’a Ekle</a>
+  </div>
+</body>
+</html>
