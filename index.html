@@ -7,39 +7,26 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
+    html, body {
       font-family: 'Poppins', sans-serif;
-      background: #0f0f1b;
+      background: #050505;
       color: #fff;
       overflow-x: hidden;
-      position: relative;
-    }#background-video {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  min-width: 100%;
-  min-height: 100%;
-  z-index: -1;
-  object-fit: cover;
-  filter: brightness(0.3);
-}
-
-header {
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(10px);
-  padding: 10px 20px;
+    }header {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 12px 20px;
   position: sticky;
   top: 0;
   z-index: 10;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 0 10px #00f2ff;
+  box-shadow: 0 0 15px #0ff;
 }
 header h1 {
   font-size: 1.5rem;
   color: #00f2ff;
-  text-shadow: 0 0 10px #00f2ff;
+  text-shadow: 0 0 12px #00f2ff;
 }
 nav a {
   margin-left: 15px;
@@ -49,13 +36,13 @@ nav a {
 }
 nav a:hover {
   color: #fff;
-  text-shadow: 0 0 5px #00f2ff;
+  text-shadow: 0 0 10px #0ff;
 }
 
 .container {
-  max-width: 1100px;
+  max-width: 1000px;
   margin: auto;
-  padding: 60px 20px;
+  padding: 50px 15px;
 }
 
 .hero {
@@ -63,12 +50,12 @@ nav a:hover {
   margin-bottom: 60px;
 }
 .hero h2 {
-  font-size: 2.2rem;
+  font-size: 2rem;
   margin-bottom: 10px;
-  text-shadow: 0 0 15px #aa00ff;
+  text-shadow: 0 0 20px #0ff;
 }
 .hero p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #ccc;
   margin-bottom: 25px;
 }
@@ -80,37 +67,21 @@ nav a:hover {
   gap: 10px;
 }
 .btn {
-  padding: 12px 20px;
-  border-radius: 10px;
-  font-size: 0.95rem;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 0.9rem;
   color: #fff;
-  cursor: pointer;
+  font-weight: 600;
   text-decoration: none;
   position: relative;
-  font-weight: 600;
+  background: transparent;
+  border: 2px solid #00f2ff;
+  transition: all 0.3s ease;
 }
-.btn.discord {
-  background: #5865f2;
-}
-.btn.panel {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid #444;
-}
-.btn::before {
-  content: "";
-  position: absolute;
-  top: -2px; left: -2px; right: -2px; bottom: -2px;
-  background: linear-gradient(45deg, #00f2ff, #aa00ff);
-  filter: blur(5px);
-  opacity: 0.6;
-  z-index: -1;
-  border-radius: 12px;
-  animation: neonGlow 6s linear infinite;
-}
-@keyframes neonGlow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+.btn:hover {
+  background: #00f2ff;
+  color: #000;
+  box-shadow: 0 0 20px #00f2ff, 0 0 40px #00f2ff;
 }
 
 .section {
@@ -119,45 +90,42 @@ nav a:hover {
 .card-grid {
   display: grid;
   gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 .card {
-  background: rgba(255,255,255,0.07);
+  background: rgba(0, 0, 0, 0.5);
   padding: 20px;
   border-radius: 12px;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 0 12px #000;
+  box-shadow: 0 0 10px #00f2ff;
   transition: 0.3s;
 }
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 0 20px #00f2ff;
+  transform: scale(1.03);
+  box-shadow: 0 0 30px #00f2ff;
 }
 .card h3 {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #00f2ff;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 .card p {
   font-size: 0.85rem;
-  color: #ccc;
+  color: #bbb;
 }
 
 .features {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
-  margin-top: 40px;
 }
 .feature {
+  background: rgba(255, 255, 255, 0.05);
   padding: 15px;
-  background: rgba(255,255,255,0.05);
   border-radius: 10px;
   text-align: center;
-  font-size: 0.85rem;
 }
 .feature i {
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: #00f2ff;
   margin-bottom: 8px;
 }
@@ -185,6 +153,27 @@ button.send {
   border-radius: 8px;
   cursor: pointer;
 }
+
+.systems {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 40px;
+}
+.systems .item {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid #00f2ff44;
+  padding: 12px;
+  border-radius: 10px;
+  color: #ccc;
+  font-size: 0.85rem;
+  transition: 0.3s;
+}
+.systems .item:hover {
+  background: rgba(0,0,0,0.7);
+  box-shadow: 0 0 15px #0ff;
+}
+
 footer {
   text-align: center;
   padding: 20px;
@@ -193,75 +182,71 @@ footer {
 }
 
 @media(max-width: 600px){
+  header h1 { font-size: 1.2rem; }
+  nav a { font-size: 0.75rem; }
   .hero h2 { font-size: 1.4rem; }
-  .hero p { font-size: 0.9rem; }
-  nav a { font-size: 0.8rem; }
+  .hero p { font-size: 0.85rem; }
+  .btn { font-size: 0.8rem; padding: 10px 14px; }
 }
 
   </style>
 </head>
 <body>
-  <video autoplay muted loop id="background-video">
-    <source src="https://assets.mixkit.co/videos/preview/mixkit-stormy-weather-clouds-over-the-city-23969-large.mp4" type="video/mp4">
-  </video>  <header>
+  <header>
     <h1>KortexBOT</h1>
     <nav>
       <a href="#">Ana Sayfa</a>
       <a href="#">Komutlar</a>
-      <a href="#">Özellikler</a>
-      <a href="#">Destek</a>
+      <a href="#">Sistemler</a>
+      <a href="#">İletişim</a>
     </nav>
   </header>  <div class="container">
     <div class="hero">
-      <h2>Sunucun İçin En Güçlü Discord Botu</h2>
-      <p>Gelişmiş sistemler, eğlence, moderasyon ve yönetim her şey tek botta!</p>
+      <h2>Sunucun İçin Tüm Sistemler Tek Yerde!</h2>
+      <p>Moderasyon, kayıt, eğlence, koruma, sistemler ve daha fazlası...</p>
       <div class="buttons">
-        <a href="#" class="btn discord">Discord'a Ekle</a>
-        <a href="#" class="btn panel">Web Panel</a>
-        <a href="#" class="btn panel">Davet Linki</a>
+        <a href="#" class="btn">Botu Ekle</a>
+        <a href="#" class="btn">Web Panel</a>
+        <a href="#" class="btn">Destek Sunucusu</a>
       </div>
     </div><div class="section">
-  <div class="card-grid">
-    <div class="card">
-      <h3>🔒 Güvenlik</h3>
-      <p>Anti-raid, küfür filtresi, kullanıcı doğrulama sistemleri.</p>
-    </div>
-    <div class="card">
-      <h3>🎮 Eğlence</h3>
-      <p>Oyun komutları, eğlenceli cevaplar, rastgele espriler.</p>
-    </div>
-    <div class="card">
-      <h3>📈 Gelişmiş Panel</h3>
-      <p>Sunucu analizleri, kullanıcı takibi ve raporlar.</p>
-    </div>
-    <div class="card">
-      <h3>💬 Chat Temizleyici</h3>
-      <p>Sohbet geçmişini kolayca temizle, düzenli sunucu.</p>
-    </div>
-  </div>
-</div>
-
-<div class="features">
-  <div class="feature">
-    <i class="fas fa-robot"></i>
-    <p>24/7 Online Performans</p>
-  </div>
-  <div class="feature">
-    <i class="fas fa-user-shield"></i>
-    <p>Yetkili Yönetimi</p>
-  </div>
-  <div class="feature">
-    <i class="fas fa-bullhorn"></i>
-    <p>Giriş/Çıkış Mesajları</p>
-  </div>
-  <div class="feature">
-    <i class="fas fa-globe"></i>
-    <p>Çoklu Dil Desteği</p>
+  <h2 style="text-align:center; margin-bottom:20px;">Sistem Özellikleri</h2>
+  <div class="systems">
+    <div class="item">Kayıt Sistemi</div>
+    <div class="item">Otorol Sistemi</div>
+    <div class="item">Küfür Engel</div>
+    <div class="item">Reklam Engel</div>
+    <div class="item">Giriş Çıkış Mesajı</div>
+    <div class="item">Hoşgeldin Paneli</div>
+    <div class="item">Kanal Koruma</div>
+    <div class="item">Emoji Koruma</div>
+    <div class="item">Ban Koruma</div>
+    <div class="item">Sunucu Sayaç</div>
+    <div class="item">Etiket Rol Sistemi</div>
+    <div class="item">Rol Koruma Sistemi</div>
+    <div class="item">Bot List Sistemi</div>
+    <div class="item">Yasaklı Tag Sistemi</div>
+    <div class="item">Snipe Sistemi</div>
+    <div class="item">AFK Sistemi</div>
+    <div class="item">Özelleştirilebilir Prefix</div>
+    <div class="item">Mod Log</div>
+    <div class="item">Sesli Sayım</div>
+    <div class="item">Davet Sistemi</div>
+    <div class="item">Seviye Sistemi</div>
+    <div class="item">Müzik Sistemi</div>
+    <div class="item">Ticket Sistemi</div>
+    <div class="item">Sunucu Paneli</div>
+    <div class="item">Captcha Giriş Sistemi</div>
+    <div class="item">Denetim Logları</div>
+    <div class="item">Emoji Logları</div>
+    <div class="item">Bot Koruma Sistemi</div>
+    <div class="item">Gelişmiş İstatistikler</div>
+    <div class="item">Webhook Koruma</div>
   </div>
 </div>
 
 <div class="section">
-  <h2 style="text-align:center; margin-bottom:20px;">Bize Ulaş</h2>
+  <h2 style="text-align:center; margin-bottom:20px;">İletişim</h2>
   <form>
     <input type="text" placeholder="Adınız" required>
     <input type="email" placeholder="E-posta" required>
@@ -271,7 +256,7 @@ footer {
 </div>
 
   </div>  <footer>
-    © 2025 KortexBOT. Tüm hakları saklıdır. | <a href="#" style="color:#00f2ff; text-decoration:none;">Gizlilik Politikası</a>
+    © 2025 KortexBOT. Tüm hakları saklıdır.
   </footer>
 </body>
       </html>
