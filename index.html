@@ -1,238 +1,187 @@
 <!DOCTYPE html>
-<html lang="tr" style="scroll-behavior:smooth">
+<html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Kortex ‑ Geleceğin Discord Botu</title>
+<meta name="viewport" content="width=1000,initial-scale=1">
+<title>Kortex</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <style>
-:root{
-  --c1:#00f5ff;
-  --c2:#ff0055;
-  --c3:#7928ca;
-  --bg:#050505;
-  --grad:linear-gradient(135deg,var(--c1),var(--c2),var(--c3));
-  --glass:rgba(255,255,255,.05);
-  --blur:blur(40px);
-}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:#fff;overflow-x:hidden}
-/* arka plan */
-#bg-canvas{position:fixed;inset:0;z-index:-2;background:#000}
-.neon-blob{position:absolute;border-radius:50%;filter:blur(120px);opacity:.6;animation:hue 10s linear infinite,float 20s ease-in-out infinite}
-.blob1{width:600px;height:600px;background:var(--c1);top:-20%;left:-20%}
-.blob2{width:500px;height:500px;background:var(--c2);bottom:-20%;right:-20%}
-.blob3{width:400px;height:400px;background:var(--c3);top:40%;left:60%}
-@keyframes hue{0%{filter:hue-rotate(0deg) blur(120px)}100%{filter:hue-rotate(360deg) blur(120px)}}
-@keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-30px) scale(1.1)}66%{transform:translate(-20px,20px) scale(.9)}}
-
-/* nav */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2rem;background:rgba(0,0,0,.4);backdrop-filter:var(--blur);display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:1.6rem;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-nav a{color:#fff;margin-left:2rem;text-decoration:none;font-weight:500;transition:.3s}
-nav a:hover{color:var(--c1);text-shadow:0 0 8px var(--c1)}
-
-/* hero */
-#hero{height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 2rem}
-h1{font-size:clamp(3.5rem,10vw,8rem);font-weight:900;letter-spacing:-.05em;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:hue 6s linear infinite}
-.btn{margin-top:2rem;padding:1rem 2.2rem;border:none;border-radius:50px;background:var(--grad);color:#000;font-weight:700;cursor:pointer;transition:.3s;box-shadow:0 0 20px var(--c1),0 0 40px var(--c1)}
-.btn:hover{transform:translateY(-3px);box-shadow:0 0 30px var(--c1),0 0 60px var(--c1)}
-section{padding:7rem 2rem;max-width:1200px;margin:auto}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2.5rem}
-.card{
-  position:relative;
-  background:var(--glass);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:24px;
-  padding:2.5rem;
-  backdrop-filter:var(--blur);
-  transition:.4s;
-  overflow:hidden;
-}
-.card:hover{
-  transform:translateY(-7px) scale(1.02);
-  box-shadow:0 0 25px var(--c1),0 0 50px var(--c1);
-  border-color:var(--c1);
-}
-.card i{font-size:2.2rem;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:1rem}
-.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2rem;text-align:center}
-.stat span{font-size:3rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.cmd-filter{display:flex;justify-content:center;gap:1rem;margin-bottom:2.5rem;flex-wrap:wrap}
-.cmd-filter button{
-  padding:.6rem 1.4rem;
-  border:1px solid rgba(255,255,255,.2);
-  border-radius:999px;
-  background:transparent;
-  color:#fff;
-  cursor:pointer;
-  transition:.3s;
-}
-.cmd-filter button.active,
-.cmd-filter button:hover{
-  background:var(--grad);
-  color:#000;
-  border-color:transparent;
-  box-shadow:0 0 15px var(--c1);
-}
-.cmd{display:none}
-.cmd.show{display:block}
-
-/* pricing */
-.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem}
-.plan{
-  background:var(--glass);
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:24px;
-  padding:2.5rem;
-  backdrop-filter:var(--blur);
-  text-align:center;
-  transition:.4s;
-  position:relative;
-}
-.plan.featured{
-  border-color:var(--c1);
-  box-shadow:0 0 30px var(--c1);
-  transform:scale(1.05)
-}
-.plan h3{font-size:1.8rem;margin-bottom:.5rem}
-.plan .price{font-size:2.5rem;font-weight:800;margin-bottom:1rem;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.plan ul{list-style:none;margin-bottom:2rem;line-height:2}
-footer{text-align:center;padding:3rem 2rem;background:var(--glass);backdrop-filter:var(--blur)}
+:root{--c1:#00f5ff;--c2:#ff0055;--bg:#000}
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+body{background:var(--bg);color:#fff;overflow-x:hidden}
+#c{position:fixed;inset:0;z-index:-1}
+#splash{position:fixed;inset:0;background:radial-gradient(circle at 20% 50%,#004e92 0%,#000428 100%);background-size:400% 400%;animation:gradient 8s ease infinite;overflow:hidden;z-index:9999;animation:fadeOut 1s 7s forwards}
+@keyframes gradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes fadeOut{to{opacity:0;visibility:hidden}}
+#splash h1{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:clamp(4rem,15vw,8rem);font-weight:900;
+background:linear-gradient(90deg,#00dbde,#fc00ff,#00dbde);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+animation:textGlow 2s ease-in-out infinite alternate,moveGradient 3s linear infinite}
+@keyframes textGlow{from{text-shadow:0 0 10px #00dbde,0 0 20px #fc00ff}to{text-shadow:0 0 20px #00dbde,0 0 40px #fc00ff}}
+@keyframes moveGradient{0%{background-position:0%}100%{background-position:100%}}
+.lightning{position:absolute;top:0;left:0;width:100%;height:100%;background:#fff;opacity:0;pointer-events:none;animation:flash 2s infinite}
+@keyframes flash{0%,100%{opacity:0}1%,3%{opacity:.8}}
+.rain{position:absolute;top:-100px;left:0;width:2px;height:100px;background:linear-gradient(transparent,#00f5ff);animation:rain 1s linear infinite}
+nav{position:fixed;top:0;left:0;right:0;padding:.8rem 1.2rem;background:rgba(0,0,0,.45);backdrop-filter:blur(20px);display:flex;justify-content:space-between;align-items:center;font-weight:700;z-index:100}
+nav a{color:#fff;margin-left:1.2rem;text-decoration:none;font-size:.9rem;transition:.3s}
+nav a:hover{color:var(--c1)}
+section{padding:4rem 1rem;max-width:1000px;margin:auto}
+h1{font-size:clamp(3rem,10vw,5.5rem);font-weight:900;letter-spacing:-.05em;background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+h2{font-size:clamp(1.5rem,5vw,2.5rem);font-weight:700;margin-bottom:1.5rem;text-align:center}
+.btn{display:inline-block;margin-top:1rem;padding:.7rem 1.6rem;border:none;border-radius:999px;background:linear-gradient(135deg,var(--c1),var(--c2));color:#000;font-weight:700;font-size:.9rem;text-decoration:none;transition:.3s;box-shadow:0 0 12px var(--c1)}
+.btn:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 0 20px var(--c1)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+.card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:1.5rem;font-size:.9rem;backdrop-filter:blur(20px);transition:.3s}
+.card:hover{background:rgba(255,255,255,.1);transform:translateY(-5px);border-color:var(--c1)}
+.card i{font-size:2rem;background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem}
+.plan{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:2rem;text-align:center}
+.plan.featured{border-color:var(--c1);box-shadow:0 0 15px var(--c1)}
+.plan .price{font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:.5rem 0}
+input,textarea{width:100%;padding:.7rem;margin:.4rem 0;border:none;border-radius:10px;background:rgba(255,255,255,.1);color:#fff;font-size:.9rem}
+footer{font-size:.8rem;text-align:center;padding:1.5rem;background:rgba(255,255,255,.05)}
+#addWrap{display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap;margin-top:1rem}
+#addWrap .btn{margin:0}
 </style>
 </head>
 <body>
-
-<!-- neon arka plan -->
-<div id="bg-canvas">
-  <div class="neon-blob blob1"></div>
-  <div class="neon-blob blob2"></div>
-  <div class="neon-blob blob3"></div>
+<!-- Modern giriş ekranı -->
+<div id="splash">
+  <canvas id="bgCanvas"></canvas>
+  <div class="lightning"></div>
+  <div class="particle" style="top:20%;left:10%;width:4px;height:4px;background:var(--c1);animation-delay:0s"></div>
+  <div class="particle" style="top:30%;left:30%;width:6px;height:6px;background:var(--c2);animation-delay:.5s"></div>
+  <div class="particle" style="top:50%;left:70%;width:5px;height:5px;background:var(--c3);animation-delay:1s"></div>
+  <div class="particle" style="top:80%;left:20%;width:3px;height:3px;background:var(--c1);animation-delay:1.5s"></div>
+  <div class="particle" style="top:60%;left:80%;width:7px;height:7px;background:var(--c2);animation-delay:2s"></div>
+  <h1>Kortex</h1>
 </div>
 
+<canvas id="c"></canvas>
 <nav>
-  <div class="logo">Kortex</div>
+  <span>Kortex</span>
   <div>
     <a href="#features">Özellikler</a>
-    <a href="#commands">Komutlar</a>
-    <a href="#pricing">Fiyatlar</a>
-    <a href="#invite">Davet</a>
+    <a href="#pricing">Paketler</a>
+    <a href="#contact">İletişim</a>
   </div>
 </nav>
 
-<section id="hero">
+<section style="height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:1rem">
   <h1>Kortex</h1>
-  <p style="max-width:600px;margin-top:1rem;font-size:1.3rem;color:#bbb">Discord’un en hızlı, en şık ve en güçlü botu. Sunucunu bir tıkla geleceğe taşı.</p>
-  <button class="btn" onclick="openLink('https://discord.com/oauth2/authorize?client_id=BOT_ID')"><i class="fab fa-discord"></i> Sunucuna Ekle</button>
-</section>
-
-<section>
-  <div class="stat-grid">
-    <div><span id="s1">0</span><p>Sunucu</p></div>
-    <div><span id="s2">0</span><p>Kullanıcı</p></div>
-    <div><span id="s3">0</span><p>Komut</p></div>
-    <div><span id="s4">0</span><p>Uptime %</p></div>
+  <p style="margin:.5rem 0 1rem;font-size:1.1rem;color:#bbb">Discord’un yeni çağı</p>
+  <div id="addWrap">
+    <a class="btn" href="https://discord.com/oauth2/authorize?client_id=BOT_ID"><i class="fab fa-discord"></i> Sunucuna Ekle</a>
+    <a class="btn" href="https://discord.gg/DESTEK_SUNUCU" style="background:#2c2f33"><i class="fas fa-users"></i> Destek Sunucusu</a>
   </div>
 </section>
 
 <section id="features">
-  <h2 style="text-align:center">Ultra-Modern Özellikler</h2>
+  <h2>Neden Kortex?</h2>
   <div class="grid">
-    <div class="card"><i class="fas fa-music"></i><h3>4K / 60 fps Müzik</h3><p>Spotify, YouTube, SoundCloud, Apple Music, Deezer ve Tidal’den kesintisiz yüksek çözünürlüklü akış.</p></div>
-    <div class="card"><i class="fas fa-shield-alt"></i><h3>AI Moderasyon</h3><p>Yapay-zekâ destekli anti-raid, spam, küfür, phishing & scam tespiti. Otomatik mute, ban ve log.</p></div>
-    <div class="card"><i class="fas fa-gamepad"></i><h3>+60 Mini Oyun</h3><p>Economy sistemli kumar, kart koleksiyonu, turnuvalar, slot, quiz, trivia, yarışma ve özel turnuvalar.</p></div>
-    <div class="card"><i class="fas fa-chart-line"></i><h3>Real-time Analytics</h3><p>Canlı sunucu ve kullanıcı istatistikleri, sesli sohbet raporları, mesaj analizi ve detaylı dashboard.</p></div>
-    <div class="card"><i class="fas fa-cog"></i><h3>Full Custom</h3><p>Prefix, renk temaları, roller, kanal izinleri, log kanalları, özel embed tasarımı ve dil desteği.</p></div>
-    <div class="card"><i class="fas fa-clock"></i><h3>7/24 Ultra-Hızlı</h3><p>Global CDN, %99.99 uptime, <50 ms latency, otomatik yedekleme ve anlık hata bildirimi.</p></div>
-  </div>
-</section>
-
-<section id="commands">
-  <h2 style="text-align:center">Komutlar</h2>
-  <div class="cmd-filter">
-    <button onclick="filterCmd('all')" class="active">Tümü</button>
-    <button onclick="filterCmd('music')">Müzik</button>
-    <button onclick="filterCmd('mod')">Moderasyon</button>
-    <button onclick="filterCmd('fun')">Eğlence</button>
-  </div>
-  <div class="grid">
-    <div class="cmd card show" data-cat="music"><h4>/play [URL / sorgu]</h4><p>Şarkıyı çal veya sıraya ekle (Spotify, YT, SC).</p></div>
-    <div class="cmd card show" data-cat="music"><h4>/skip [sayı]</h4><p>Şu anki veya birden çok şarkıyı geç.</p></div>
-    <div class="cmd card show" data-cat="music"><h4>/queue</h4><p>Çalma sırasını göster, shuffle, loop, clear.</p></div>
-    <div class="cmd card show" data-cat="mod"><h4>/ban [@user] [sebep]</h4><p>Kullanıcıyı yasakla ve logla.</p></div>
-    <div class="cmd card show" data-cat="mod"><h4>/mute [@user] [süre] [sebep]</h4><p>Süreli susturma ve DM bildirimi.</p></div>
-    <div class="cmd card show" data-cat="mod"><h4>/slowmode [kanal] [sn]</h4><p>Kanal bazlı yavaşlatma.</p></div>
-    <div class="cmd card show" data-cat="fun"><h4>/meme [kategori]</h4><p>Trend meme’ler ve GIF’ler.</p></div>
-    <div class="cmd card show" data-cat="fun"><h4>/slot [miktar]</h4><p>Slot makinesi ve jackpot.</p></div>
-    <div class="cmd card show" data-cat="fun"><h4>/avatar [@user] [büyük]</h4><p>HD avatar ve banner göster.</p></div>
+    <div class="card"><i class="fas fa-music"></i><h3>4K Müzik</h3><p>Spotify, YouTube, SoundCloud, Apple Music, Tidal, Deezer — 7/24 kesintisiz.</p></div>
+    <div class="card"><i class="fas fa-shield-alt"></i><h3>AI Moderasyon</h3><p>Otomatik spam, raid, küfür, phishing, scam, NSFW tespiti; DM bildirimleri.</p></div>
+    <div class="card"><i class="fas fa-gamepad"></i><h3>+60 Mini Oyun</h3><p>Economy, kart koleksiyonu, slot, blackjack, rulet, quiz, trivia, turnuvalar.</p></div>
+    <div class="card"><i class="fas fa-chart-line"></i><h3>Canlı Analitik</h3><p>Real-time sunucu & kullanıcı istatistikleri, sesli sohbet raporları, dashboard.</p></div>
+    <div class="card"><i class="fas fa-cog"></i><h3>Full Custom</h3><p>Prefix, renk temaları, dil, rol izinleri, log kanalları, özel embed tasarımları.</p></div>
+    <div class="card"><i class="fas fa-clock"></i><h3>7/24 Ultra-Hızlı</h3><p>Global CDN, %99.99 uptime, <50 ms gecikme, otomatik yedekleme.</p></div>
   </div>
 </section>
 
 <section id="pricing">
-  <h2 style="text-align:center">Planlar</h2>
-  <div class="pricing-grid">
+  <h2>Paketler</h2>
+  <div class="grid">
     <div class="plan">
       <h3>Ücretsiz</h3>
       <div class="price">₺0</div>
       <ul>
         <li>100 komut</li>
+        <li>5 sunucu</li>
         <li>24/7 müzik</li>
         <li>Temel moderasyon</li>
-        <li>5 sunucu</li>
       </ul>
-      <button class="btn" onclick="openLink('https://discord.com/oauth2/authorize?client_id=BOT_ID')">Seç</button>
+      <a class="btn" href="https://discord.com/oauth2/authorize?client_id=BOT_ID">Seç</a>
     </div>
     <div class="plan featured">
       <h3>Pro</h3>
-      <div class="price">₺29<span style="font-size:1rem">/ay</span></div>
+      <div class="price">₺29<span style="font-size:.9rem">/ay</span></div>
       <ul>
         <li>Tüm komutlar</li>
+        <li>Sınırsız sunucu</li>
         <li>4K müzik + efektler</li>
         <li>AI moderasyon</li>
-        <li>Sınırsız sunucu</li>
         <li>Özel dashboard</li>
+        <li>Öncelikli destek</li>
       </ul>
-      <button class="btn" onclick="openLink('https://discord.gg/DESTEK_SUNUCU')">Satın Al</button>
+      <a class="btn" href="https://discord.gg/DESTEK_SUNUCU">Satın Al</a>
     </div>
     <div class="plan">
       <h3>Enterprise</h3>
-      <div class="price">₺99<span style="font-size:1rem">/ay</span></div>
+      <div class="price">₺99<span style="font-size:.9rem">/ay</span></div>
       <ul>
         <li>Pro + özel özellikler</li>
         <li>API erişimi</li>
         <li>White-label</li>
-        <li>7/24 destek</li>
+        <li>7/24 telefon destek</li>
       </ul>
-      <button class="btn" onclick="openLink('https://discord.gg/DESTEK_SUNUCU')">İletişim</button>
+      <a class="btn" href="https://discord.gg/DESTEK_SUNUCU">İletişim</a>
     </div>
   </div>
 </section>
 
-<section id="invite" style="text-align:center">
-  <h2>Hazır mısın?</h2>
-  <p style="max-width:500px;margin:1rem auto 2rem;color:#aaa">2 tıkla Kortex sunucuna katılır.</p>
-  <button class="btn" onclick="openLink('https://discord.com/oauth2/authorize?client_id=BOT_ID')">
-    <i class="fab fa-discord"></i> Davet Et
-  </button>
+<section id="contact">
+  <h2>İletişim</h2>
+  <form action="mailto:destek@kortexbot.com" method="post" enctype="text/plain">
+    <input type="text" name="kullanici" placeholder="Kullanıcı adı" required>
+    <input type="email" name="email" placeholder="E-posta adresi" required>
+    <textarea name="mesaj" rows="4" placeholder="Mesajınız..." required></textarea>
+    <button type="submit" class="btn">Gönder</button>
+  </form>
 </section>
 
-<footer>
-  <p>&copy; 2024 Kortex — The neon future of Discord</p>
-</footer>
+<footer>© 2024 Kortex — Built for the future</footer>
 
 <script>
-function openLink(u){window.open(u,'_blank')}
-function filterCmd(c){
-  document.querySelectorAll('.cmd-filter button').forEach(b=>b.classList.remove('active'));
-  event.target.classList.add('active');
-  document.querySelectorAll('.cmd').forEach(el=>el.classList.toggle('show',c==='all'||el.dataset.cat===c));
+// arka plan
+const c=document.getElementById('c'),x=c.getContext('2d'),w=window.innerWidth,h=window.innerHeight;
+c.width=w;c.height=h;
+const p=Array(300).fill(0).map(()=>({x:Math.random()*w,y:Math.random()*h,v:Math.random()*3+1,c:`hsl(${180+Math.random()*60},100%,50%)`}));
+function draw(){
+  x.fillStyle='rgba(0,0,0,.05)';x.fillRect(0,0,w,h);
+  p.forEach(d=>{x.fillStyle=d.c;x.fillRect(d.x,d.y,2,12);d.y+=d.v;if(d.y>h){d.y=0;d.x=Math.random()*w}});
+  requestAnimationFrame(draw);
 }
-// sayaç animasyonu
-['s1','s2','s3','s4'].forEach((id,i)=>{
-  const t=[1650,52000,108,99.9][i],el=document.getElementById(id);
-  let n=0,step=t/100;
-  const it=setInterval(()=>{n+=step;el.textContent=Math.floor(n)+(i===3?'%':i===2?'':'+');if(n>=t)clearInterval(it)},20);
-});
+draw();
+
+// gerçek yağmur
+const rc=document.getElementById('bgCanvas');
+rc.width=window.innerWidth;
+rc.height=window.innerHeight;
+const rctx=rc.getContext('2d');
+const drops=[];
+for(let i=0;i<400;i++){
+  drops.push({
+    x:Math.random()*rc.width,
+    y:Math.random()*rc.height,
+    length:Math.random()*20+10,
+    speed:Math.random()*10+5
+  });
+}
+function animateRain(){
+  rctx.clearRect(0,0,rc.width,rc.height);
+  rctx.strokeStyle='rgba(0,245,255,0.7)';
+  rctx.lineWidth=1;
+  drops.forEach(d=>{
+    rctx.beginPath();
+    rctx.moveTo(d.x,d.y);
+    rctx.lineTo(d.x,d.y+d.length);
+    rctx.stroke();
+    d.y+=d.speed;
+    if(d.y>rc.height){d.y=-d.length;d.x=Math.random()*rc.width}
+  });
+  requestAnimationFrame(animateRain);
+}
+animateRain();
+function openLink(u){window.open(u,'_blank')}
 </script>
 </body>
-                                                                                                                                                                      </html>
-                                                                                                                                                                      
+                                              </html>
+                                              
