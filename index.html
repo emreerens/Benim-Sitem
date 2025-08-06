@@ -1,262 +1,177 @@
-<!DOCTYPE html><html lang="tr">
+<!DOCTYPE html>
+<html lang="tr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KortexBOT - Discord Bot Sitesi</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+  <title>Kortex Bot Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body {
-      font-family: 'Poppins', sans-serif;
-      background: #050505;
-      color: #fff;
-      overflow-x: hidden;
-    }header {
-  background: rgba(0, 0, 0, 0.8);
-  padding: 12px 20px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 0 15px #0ff;
-}
-header h1 {
-  font-size: 1.5rem;
-  color: #00f2ff;
-  text-shadow: 0 0 12px #00f2ff;
-}
-nav a {
-  margin-left: 15px;
-  color: #ccc;
-  text-decoration: none;
-  font-size: 0.9rem;
-}
-nav a:hover {
-  color: #fff;
-  text-shadow: 0 0 10px #0ff;
-}
+    * {
+      box-sizing: border-box;
+      font-family: 'Orbitron', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #000;
+      color: #0ff;
+      min-height: 100vh;
+    }
+    .login-box {
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid #0ff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #0ff;
+      backdrop-filter: blur(8px);
+      max-width: 350px;
+      margin: 100px auto;
+    }
+    h2 {
+      text-align: center;
+      color: #0ff;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #0ff;
+    }
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      background: transparent;
+      border: 1px solid #0ff;
+      border-radius: 6px;
+      color: #0ff;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #0ff;
+      border-radius: 5px;
+      background: transparent;
+      color: #0ff;
+      cursor: pointer;
+      box-shadow: 0 0 10px #0ff;
+      transition: all 0.3s;
+    }
+    button:hover {
+      background: #0ff;
+      color: #000;
+      box-shadow: 0 0 20px #0ff;
+    }
+    .error {
+      text-align: center;
+      color: red;
+      margin-top: 10px;
+    }
+    .admin-panel {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .admin-panel h1 {
+      text-align: center;
+      color: #0ff;
+      text-shadow: 0 0 10px #0ff;
+    }
+    .box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #0ff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px #0ff66f88;
+    }
+    .box h3 {
+      margin-bottom: 10px;
+    }
+    .hidden {
+      display: none;
+    }
 
-.container {
-  max-width: 1000px;
-  margin: auto;
-  padding: 50px 15px;
-}
-
-.hero {
-  text-align: center;
-  margin-bottom: 60px;
-}
-.hero h2 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-  text-shadow: 0 0 20px #0ff;
-}
-.hero p {
-  font-size: 1rem;
-  color: #ccc;
-  margin-bottom: 25px;
-}
-
-.buttons {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.btn {
-  padding: 12px 18px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  color: #fff;
-  font-weight: 600;
-  text-decoration: none;
-  position: relative;
-  background: transparent;
-  border: 2px solid #00f2ff;
-  transition: all 0.3s ease;
-}
-.btn:hover {
-  background: #00f2ff;
-  color: #000;
-  box-shadow: 0 0 20px #00f2ff, 0 0 40px #00f2ff;
-}
-
-.section {
-  margin-bottom: 60px;
-}
-.card-grid {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-}
-.card {
-  background: rgba(0, 0, 0, 0.5);
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px #00f2ff;
-  transition: 0.3s;
-}
-.card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 30px #00f2ff;
-}
-.card h3 {
-  font-size: 1.1rem;
-  color: #00f2ff;
-  margin-bottom: 10px;
-}
-.card p {
-  font-size: 0.85rem;
-  color: #bbb;
-}
-
-.features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-}
-.feature {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 15px;
-  border-radius: 10px;
-  text-align: center;
-}
-.feature i {
-  font-size: 1.8rem;
-  color: #00f2ff;
-  margin-bottom: 8px;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  max-width: 500px;
-  margin: auto;
-}
-input, textarea {
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-}
-button.send {
-  background: #00f2ff;
-  padding: 10px;
-  border: none;
-  color: #000;
-  font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.systems {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 15px;
-  margin-top: 40px;
-}
-.systems .item {
-  background: rgba(0,0,0,0.4);
-  border: 1px solid #00f2ff44;
-  padding: 12px;
-  border-radius: 10px;
-  color: #ccc;
-  font-size: 0.85rem;
-  transition: 0.3s;
-}
-.systems .item:hover {
-  background: rgba(0,0,0,0.7);
-  box-shadow: 0 0 15px #0ff;
-}
-
-footer {
-  text-align: center;
-  padding: 20px;
-  color: #888;
-  font-size: 0.8rem;
-}
-
-@media(max-width: 600px){
-  header h1 { font-size: 1.2rem; }
-  nav a { font-size: 0.75rem; }
-  .hero h2 { font-size: 1.4rem; }
-  .hero p { font-size: 0.85rem; }
-  .btn { font-size: 0.8rem; padding: 10px 14px; }
-}
-
+    /* Mobil duyarlılık */
+    @media (max-width: 600px) {
+      .login-box {
+        margin: 50px 20px;
+        padding: 20px;
+      }
+      .admin-panel {
+        padding: 10px;
+      }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>KortexBOT</h1>
-    <nav>
-      <a href="#">Ana Sayfa</a>
-      <a href="#">Komutlar</a>
-      <a href="#">Sistemler</a>
-      <a href="#">İletişim</a>
-    </nav>
-  </header>  <div class="container">
-    <div class="hero">
-      <h2>Sunucun İçin Tüm Sistemler Tek Yerde!</h2>
-      <p>Moderasyon, kayıt, eğlence, koruma, sistemler ve daha fazlası...</p>
-      <div class="buttons">
-        <a href="#" class="btn">Botu Ekle</a>
-        <a href="#" class="btn">Web Panel</a>
-        <a href="#" class="btn">Destek Sunucusu</a>
-      </div>
-    </div><div class="section">
-  <h2 style="text-align:center; margin-bottom:20px;">Sistem Özellikleri</h2>
-  <div class="systems">
-    <div class="item">Kayıt Sistemi</div>
-    <div class="item">Otorol Sistemi</div>
-    <div class="item">Küfür Engel</div>
-    <div class="item">Reklam Engel</div>
-    <div class="item">Giriş Çıkış Mesajı</div>
-    <div class="item">Hoşgeldin Paneli</div>
-    <div class="item">Kanal Koruma</div>
-    <div class="item">Emoji Koruma</div>
-    <div class="item">Ban Koruma</div>
-    <div class="item">Sunucu Sayaç</div>
-    <div class="item">Etiket Rol Sistemi</div>
-    <div class="item">Rol Koruma Sistemi</div>
-    <div class="item">Bot List Sistemi</div>
-    <div class="item">Yasaklı Tag Sistemi</div>
-    <div class="item">Snipe Sistemi</div>
-    <div class="item">AFK Sistemi</div>
-    <div class="item">Özelleştirilebilir Prefix</div>
-    <div class="item">Mod Log</div>
-    <div class="item">Sesli Sayım</div>
-    <div class="item">Davet Sistemi</div>
-    <div class="item">Seviye Sistemi</div>
-    <div class="item">Müzik Sistemi</div>
-    <div class="item">Ticket Sistemi</div>
-    <div class="item">Sunucu Paneli</div>
-    <div class="item">Captcha Giriş Sistemi</div>
-    <div class="item">Denetim Logları</div>
-    <div class="item">Emoji Logları</div>
-    <div class="item">Bot Koruma Sistemi</div>
-    <div class="item">Gelişmiş İstatistikler</div>
-    <div class="item">Webhook Koruma</div>
+  <div id="login-page">
+    <div class="login-box">
+      <h2>Admin Giriş</h2>
+      <input type="text" id="username" placeholder="Kullanıcı Adı" />
+      <input type="password" id="password" placeholder="Şifre" />
+      <button onclick="login()">Giriş Yap</button>
+      <p class="error" id="error-msg"></p>
+    </div>
   </div>
-</div>
 
-<div class="section">
-  <h2 style="text-align:center; margin-bottom:20px;">İletişim</h2>
-  <form>
-    <input type="text" placeholder="Adınız" required>
-    <input type="email" placeholder="E-posta" required>
-    <textarea rows="4" placeholder="Mesajınız..."></textarea>
-    <button class="send">Gönder</button>
-  </form>
-</div>
+  <div id="admin-panel" class="admin-panel hidden">
+    <h1>Admin Paneli</h1>
 
-  </div>  <footer>
-    © 2025 KortexBOT. Tüm hakları saklıdır.
-  </footer>
+    <div class="box">
+      <h3>📊 İstatistikler</h3>
+      <p>Sunucular: 124</p>
+      <p>Kullanıcılar: 12,340</p>
+      <p>Aktif Komutlar: 58</p>
+    </div>
+
+    <div class="box">
+      <h3>⚙️ Bot Durumu</h3>
+      <p>Durum: <span style="color: lime">Aktif</span></p>
+      <p>Son Yenileme: 5 dakika önce</p>
+    </div>
+
+    <div class="box">
+      <h3>📝 Güncellemeler</h3>
+      <ul>
+        <li>+ Oyun komutları eklendi</li>
+        <li>+ Captcha sistemi geliştirildi</li>
+        <li>+ Komut log sistemi testte</li>
+      </ul>
+    </div>
+
+    <div class="box">
+      <h3>🚀 Hızlı Eylemler</h3>
+      <button>🔄 Yeniden Başlat</button>
+      <button>🛠️ Bakım Modu</button>
+    </div>
+
+    <div class="box">
+      <h3>💬 Mesaj Gönder</h3>
+      <input type="text" placeholder="Mesaj yaz..." style="width: 100%; padding: 8px;" />
+      <button style="margin-top: 10px;">Gönder</button>
+    </div>
+
+    <div class="box">
+      <h3>🖥️ Sunucu Listesi</h3>
+      <ul>
+        <li>Kortex Destek</li>
+        <li>Kullanıcı Sunucusu</li>
+        <li>Oyun Sunucusu</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const errorMsg = document.getElementById("error-msg");
+
+      if (username === "Roviera" && password === "Emreeren193765") {
+        document.getElementById("login-page").classList.add("hidden");
+        document.getElementById("admin-panel").classList.remove("hidden");
+      } else {
+        errorMsg.textContent = "Hatalı kullanıcı adı veya şifre!";
+      }
+    }
+  </script>
 </body>
-      </html>
+</html>
