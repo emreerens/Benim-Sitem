@@ -2,10 +2,158 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <title>Kortex Bot Sitesi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kortex Bot</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0e0e1a;
+      color: #fff;
+      line-height: 1.6;
+    }
+
+    header {
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #0a0a15;
+      border-bottom: 1px solid #222;
+    }
+
+    nav a {
+      color: #aaa;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: #fff;
+    }
+
+    .btn {
+      background-color: #5865f2;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 6px;
+      border: none;
+      text-decoration: none;
+      display: inline-block;
+      margin: 5px 10px 5px 0;
+    }
+
+    .btn.secondary {
+      background-color: #2c2f4b;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    .section {
+      margin-bottom: 60px;
+    }
+
+    .title {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #ccc;
+      margin-bottom: 20px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .card {
+      background-color: #1a1a2e;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #fff;
+    }
+
+    .card p {
+      color: #aaa;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      nav {
+        margin-top: 10px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>Hoşgeldin Kortex Bot Sitesine!</h1>
-  <p>Bu GitHub Pages ile oluşturulmuş basit bir web sayfasıdır.</p>
+
+<header>
+  <div style="font-weight: bold; font-size: 20px;">KortexBOT</div>
+  <nav>
+    <a href="#">Ana Sayfa</a>
+    <a href="#">Komutlar</a>
+    <a href="#">Premium</a>
+    <a href="#">Reklam Ver</a>
+    <a href="#">Giriş Yap</a>
+  </nav>
+</header>
+
+<div class="container">
+  <div class="section" style="text-align: center;">
+    <div class="title">Discord için ihtiyacınız olan tek botla tanışın</div>
+    <div class="subtitle">Birçok özellik barındıran ve her geçen gün daha da yükselen KortexBOT ile sunucunuzu renklendirin.</div>
+    <a href="#" class="btn">Discord'a ekle</a>
+    <a href="#" class="btn secondary">Kontrol Paneli</a>
+  </div>
+
+  <div class="section">
+    <div class="card-grid">
+      <div class="card">
+        <h3>Tamamen Özelleştirilebilir Sistemler</h3>
+        <p>KortexBOT'un moderasyon, güvenlik, denetim kaydı, otomatik cevap gibi özellikleriyle sunucunuzu kişiselleştirin.</p>
+        <a href="#" class="btn">Discord'a ekle</a>
+      </div>
+      <div class="card">
+        <h3>Üst Düzey Güvenlik Sistemleri</h3>
+        <p>Sunucunuzu her türlü tehlikeye karşı üst düzey güvenlik sistemleriyle koruyun.</p>
+        <a href="#" class="btn">Discord'a ekle</a>
+      </div>
+      <div class="card">
+        <h3>Emoji Rol Sistemi</h3>
+        <p>Emoji rol sistemiyle üyeler istedikleri rolleri tepkiler veya butonlar ile kolayca alabilir.</p>
+        <a href="#" class="btn">Discord'a ekle</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2025 KortexBOT. Tüm hakları saklıdır.
+</footer>
+
 </body>
-</html>
+  </html>
