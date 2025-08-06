@@ -2,192 +2,95 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kortex Bot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kortex Bot – Premium & Özellikler</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* Genel stil */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Orbitron', sans-serif;
-    }
-    body {
-      background-color: #000;
-      color: #0ff;
-      min-height: 100vh;
-      overflow: hidden;
-    }
-
-    /* Ana sayfa ve bot tanıtım */
-    .hero {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      height: 100vh;
-      background: url('https://example.com/background.gif') center center no-repeat;
-      background-size: cover;
-      animation: bgMove 10s linear infinite;
-    }
-
-    .hero h1 {
-      font-size: 4em;
-      text-shadow: 0 0 20px #0ff;
-      margin-bottom: 20px;
-    }
-
-    .hero p {
-      font-size: 1.5em;
-      margin-bottom: 30px;
-    }
-
-    .hero button {
-      padding: 15px 30px;
-      background: #0ff;
-      border: none;
-      border-radius: 5px;
-      color: #000;
-      font-size: 1.2em;
-      cursor: pointer;
-      box-shadow: 0 0 15px #0ff;
-      transition: 0.3s;
-    }
-
-    .hero button:hover {
-      background: #000;
-      color: #0ff;
-      box-shadow: 0 0 20px #0ff;
-    }
-
-    /* Animasyonlar */
-    @keyframes bgMove {
-      0% {
-        background-position: 0 0;
-      }
-      100% {
-        background-position: 100% 100%;
-      }
-    }
-
-    /* Admin Paneli */
-    .login-box {
-      background: rgba(0, 0, 0, 0.8);
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px #0ff;
-      backdrop-filter: blur(10px);
-      width: 100%;
-      max-width: 400px;
-      margin: 100px auto;
-      display: none;
-    }
-
-    .login-box input {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 2px solid #0ff;
-      border-radius: 5px;
-      background: transparent;
-      color: #0ff;
-    }
-
-    .login-box button {
-      width: 100%;
-      padding: 10px;
-      background: transparent;
-      color: #0ff;
-      border: 2px solid #0ff;
-      border-radius: 5px;
-      cursor: pointer;
-      box-shadow: 0 0 10px #0ff;
-      transition: 0.3s;
-    }
-
-    .login-box button:hover {
-      background: #0ff;
-      color: #000;
-    }
-
-    /* Yönetim Paneli */
-    .admin-panel {
-      background: black;
-      padding: 30px;
-      display: none;
-      color: #fff;
-    }
-
-    .admin-panel h1 {
-      text-align: center;
-      color: #0ff;
-      margin-bottom: 20px;
-    }
-
-    .box {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid #0ff;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Orbitron',sans-serif; }
+    body { background:#000; color:#0ff; }
+    a { color:#0ff; text-decoration:none; }
+    header { padding:60px 20px; text-align:center; background:rgba(0,0,0,0.5); backdrop-filter:blur(10px);}
+    header h1 { font-size:3rem; text-shadow:0 0 10px #0ff; animation:flicker 3s infinite;}
+    header p { margin-top:10px; color:#bbb; font-size:1.2rem;}
+    .btn { display:inline-block;margin-top:20px;padding:12px 28px;background:#0ff;border:none;border-radius:8px;color:#000;font-size:1.1rem;cursor:pointer;box-shadow:0 0 15px #0ff;transition:0.3s;}
+    .btn:hover{background:#000;color:#0ff;box-shadow:0 0 25px #0ff;}
+    @keyframes flicker{0%,100%{opacity:1;}50%{opacity:0.8;}}
+    section { padding:60px 20px; }
+    .features { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:20px; }
+    .feature { background:rgba(0,0,0,0.6); border:2px solid #0ff; border-radius:12px; padding:20px; transition:0.3s; }
+    .feature:hover { transform:scale(1.05); box-shadow:0 0 20px #0ff;}
+    .feature h3 { margin-bottom:10px; font-size:1.1rem;}
+    /* Premium bölümü */
+    .premium { text-align:center; padding:50px 20px; background:rgba(255,255,255,0.03); }
+    .premium h2 { font-size:2rem; margin-bottom:20px; color:#0ff;}
+    .premium p { color:#ccc; max-width:700px; margin:auto; line-height:1.5;}
+    /* Yönetim panel */
+    #login-page, #admin-panel { max-width:400px; margin:30px auto; padding:30px; display:none; background:rgba(0,0,0,0.7); border:2px solid #0ff; border-radius:10px; }
+    #login-page { display:block; }
+    .input-field { width:100%; padding:10px; margin:10px 0; background:transparent; border:2px solid #0ff; border-radius:6px; color:#0ff;}
+    .login-btn { width:100%; padding:10px; background:transparent; border:2px solid #0ff; color:#0ff; cursor:pointer; }
+    .login-btn:hover { background:#0ff; color:#000; }
+    .error { color:red; text-align:center; margin-top:10px; }
+    .stat-box { background:rgba(0,0,0,0.6); border:2px solid #0ff; margin-bottom:15px; padding:15px; border-radius:8px;}
+    footer { padding:30px; text-align:center; font-size:0.9rem; color:#555;}
+    @media(max-width:600px){ header h1{font-size:2rem;} .btn{padding:10px 20px;} }
   </style>
 </head>
 <body>
 
-  <!-- Ana Sayfa -->
-  <section class="hero">
-    <h1>Kortex Bot</h1>
-    <p>En iyi Discord botunuzu keşfedin.</p>
-    <button>Botu Sunucuya Ekle</button>
-  </section>
+<header>
+  <h1>KORTEX BOT</h1>
+  <p>Discord için en iyi hepsi bir arada bot</p>
+  <button class="btn" onclick="scrollToSection('premium')">Premium'u Keşfet</button>
+</header>
 
-  <!-- Admin Giriş -->
-  <div class="login-box" id="login-page">
-    <h2>Admin Giriş</h2>
-    <input type="text" id="username" placeholder="Kullanıcı Adı" />
-    <input type="password" id="password" placeholder="Şifre" />
-    <button onclick="login()">Giriş Yap</button>
-    <p id="error-msg" style="color:red;"></p>
-  </div>
+<section class="premium" id="premium">
+  <h2>Premium</h2>
+  <p>Özel botlar, yapay zeka entegrasyonu, gelişmiş kontrol paneli ve daha fazlası... Cortex Premium paketleriyle deneyimini zirveye taşı!</p>
+  <button class="btn">Premium Satın Al</button>
+</section>
 
-  <!-- Admin Paneli -->
-  <div class="admin-panel" id="admin-panel">
-    <h1>Admin Paneli</h1>
-    <div class="box">
-      <h3>İstatistikler</h3>
-      <p>Sunucular: 124</p>
-      <p>Kullanıcılar: 12,340</p>
-      <p>Aktif Komutlar: 58</p>
-    </div>
-    <div class="box">
-      <h3>Bot Durumu</h3>
-      <p>Durum: Aktif</p>
-      <p>Son Yenileme: 5 dakika önce</p>
-    </div>
-    <div class="box">
-      <h3>Hızlı Eylemler</h3>
-      <button>Yeniden Başlat</button>
-      <button>Bakım Moduna Al</button>
-    </div>
-  </div>
+<section class="features" id="features">
+  <div class="feature"><h3>Özellikler</h3><p>Komutlar, koruma sistemleri ve eğlence özellikleri.</p></div>
+  <div class="feature"><h3>Kaynaklar</h3><p>Dokümantasyon, destek sunucusu ve API.</p></div>
+  <div class="feature"><h3>Discord ile Giriş</h3><p>Tek tıkla Discord ile bağlan.</p></div>
+</section>
 
-  <script>
-    function login() {
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      const errorMsg = document.getElementById('error-msg');
+<div id="login-page">
+  <h2>Admin Giriş</h2>
+  <input type="text" id="username" class="input-field" placeholder="Kullanıcı Adı">
+  <input type="password" id="password" class="input-field" placeholder="Şifre">
+  <button class="login-btn" onclick="login()">Giriş Yap</button>
+  <p id="error-msg" class="error"></p>
+</div>
 
-      if (username === "Roviera" && password === "Emreeren193765") {
-        document.getElementById("login-page").style.display = "none";
-        document.getElementById("admin-panel").style.display = "block";
-      } else {
-        errorMsg.textContent = "Hatalı kullanıcı adı veya şifre!";
-      }
+<div id="admin-panel">
+  <h2>Admin Paneli</h2>
+  <div class="stat-box">Sunucular: 124</div>
+  <div class="stat-box">Kullanıcılar: 12,340</div>
+  <div class="stat-box">Komutlar: 58</div>
+  <button class="login-btn" onclick="alert('Yeniden Başlatıldı')">Yeniden Başlat</button>
+</div>
+
+<footer>
+  © 2025 Kortex Bot | Discord’a Ekle | Gizlilik Politikası
+</footer>
+
+<script>
+  function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({ behavior:'smooth' });
+  }
+  function login(){
+    const u=document.getElementById('username').value;
+    const p=document.getElementById('password').value;
+    if(u==='Roviera' && p==='Emreeren193765'){
+      document.getElementById('login-page').style.display='none';
+      document.getElementById('admin-panel').style.display='block';
+    } else {
+      document.getElementById('error-msg').textContent='Hatalı kullanıcı adı veya şifre.';
     }
-  </script>
+  }
+</script>
 
 </body>
-  </html>
+</html>
