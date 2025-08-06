@@ -1,242 +1,176 @@
-<!DOCTYPE html>
+body>
+  </htm<!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kortex BOT</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #0f0f1b, #1c1c2b);
-      color: #fff;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 40px;
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 0;
-      z-index: 999;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
-    }
-
-    header h1 {
-      font-size: 24px;
-      color: #fff;
-      text-shadow: 0 0 10px #00f2ff;
-    }
-
-    nav a {
-      margin-left: 20px;
-      text-decoration: none;
-      color: #ccc;
-      font-weight: 500;
-      transition: 0.3s;
-    }
-
-    nav a:hover {
-      color: #fff;
-      text-shadow: 0 0 5px #00f2ff;
-    }
-
-    .hero {
-      text-align: center;
-      padding: 80px 20px 60px;
-    }
-
-    .hero h2 {
-      font-size: 40px;
-      margin-bottom: 20px;
-      text-shadow: 0 0 10px #aa00ff;
-    }
-
-    .hero p {
-      font-size: 18px;
-      color: #ccc;
-      max-width: 600px;
-      margin: 0 auto 30px;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      padding: 14px 30px;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      text-decoration: none;
-      font-size: 16px;
-      transition: 0.3s ease-in-out;
-      position: relative;
-      z-index: 1;
-    }
-
-    .btn::before {
-      content: "";
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(45deg, #00f2ff, #aa00ff, #00f2ff);
-      background-size: 400%;
-      z-index: -1;
-      filter: blur(5px);
-      opacity: 0.6;
-      border-radius: 12px;
-      animation: neonGlow 8s linear infinite;
-    }
-
-    @keyframes neonGlow {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-
-    .btn.discord {
-      background-color: #5865f2;
-      color: white;
-      border: none;
-    }
-
-    .btn.panel {
-      background-color: rgba(255,255,255,0.1);
-      color: #fff;
-      border: 1px solid #444;
-    }
-
-    .section {
-      padding: 60px 20px;
-    }
-
-    .card-grid {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
-      backdrop-filter: blur(10px);
-      transition: 0.3s ease;
-      position: relative;
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(45deg, #00f2ff, #aa00ff);
-      background-size: 400%;
-      z-index: -1;
-      filter: blur(6px);
-      opacity: 0.2;
-      border-radius: 16px;
-      animation: neonGlow 6s ease infinite;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 0 30px rgba(0,0,0,0.4);
-    }
-
-    .card h3 {
-      color: #fff;
-      margin-bottom: 10px;
-      text-shadow: 0 0 5px #00f2ff;
-    }
-
-    .card p {
-      color: #ccc;
-      font-size: 15px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 30px 20px;
-      color: #888;
-      font-size: 14px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kortex BOT</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'Poppins',sans-serif;
+    color:#fff;
+    overflow-x:hidden;
+    position:relative;
+    min-height:100vh;
+    background:#0f0f1b;
+  }
+  /* yağmur arka plan */
+  #rain {
+    pointer-events:none;
+    position:fixed; top:0; left:0; width:100%; height:100%; z-index:0;
+    background: url('https://i.imgur.com/3zJ4F9O.png') repeat;
+    opacity:0.3; animation: rainMove 10s linear infinite;
+  }
+  @keyframes rainMove { 0% {background-position:0 0;} 100% {background-position:0 100%;} }
+  /* şimşek efekti */
+  #flash {
+    position:fixed; top:0; left:0; width:100%; height:100%;
+    background:white; opacity:0; animation: flash 15s infinite;
+    z-index:1;
+  }
+  @keyframes flash {
+    0%,20%,40%,100% {opacity:0;}
+    21%,22%,25% {opacity:0.8;}
+    23% {opacity:1;}
+    24% {opacity:0.8;}
+  }
+  header {
+    position:sticky; top:0; z-index:5;
+    background:rgba(0,0,0,0.5); backdrop-filter:blur(10px);
+    padding:15px 30px; display:flex; justify-content:space-between; align-items:center;
+  }
+  header h1 { font-size:22px; text-shadow:0 0 8px #00f2ff; }
+  nav a {
+    color:#ccc; margin-left:15px;
+    text-decoration:none; font-weight:500; transition:0.3s;
+  }
+  nav a:hover { color:#fff; text-shadow:0 0 5px #00f2ff; }
+  .container { padding:60px 20px; position:relative; z-index:2; max-width:1000px; margin:auto; }
+  .hero h2 { font-size:36px; text-align:center; margin-bottom:15px; text-shadow:0 0 10px #aa00ff; }
+  .hero p { text-align:center; color:#ccc; margin-bottom:25px; font-size:18px; max-width:600px; margin-left:auto; margin-right:auto; }
+  .buttons { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:60px; }
+  .btn {
+    padding:12px 25px; border-radius:8px; font-weight:600; font-size:15px;
+    position:relative; z-index:1; cursor:pointer; text-decoration:none; transition:0.3s;
+  }
+  .btn.discord {
+    background:#5865f2; color:#fff;
+  }
+  .btn.panel {
+    background:rgba(255,255,255,0.1); color:#fff; border:1px solid #444;
+  }
+  .btn::before {
+    content:""; position:absolute; top:-2px; left:-2px; right:-2px; bottom:-2px;
+    background:linear-gradient(45deg,#00f2ff,#aa00ff,#00f2ff); background-size:400%;
+    filter:blur(5px); opacity:0.6; border-radius:10px;
+    animation: neonGlow 8s linear infinite; z-index:-1;
+  }
+  @keyframes neonGlow { 0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;} }
+  .section { margin-bottom:60px; }
+  .card-grid {
+    display:grid; gap:25px;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  }
+  .card {
+    background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+    padding:20px; border-radius:12px; backdrop-filter:blur(8px);
+    box-shadow:0 0 15px rgba(0,0,0,0.2); position:relative; overflow:hidden;
+    transition:0.3s;
+  }
+  .card::before {
+    content:""; position:absolute; top:-2px; left:-2px; right:-2px; bottom:-2px;
+    background:linear-gradient(45deg,#00f2ff,#aa00ff); background-size:400%;
+    filter:blur(6px); opacity:0.2; border-radius:14px;
+    animation: neonGlow 6s ease infinite; z-index:-1;
+  }
+  .card:hover { transform:translateY(-5px); box-shadow:0 0 25px rgba(0,0,0,0.4); }
+  .card h3 { margin-bottom:8px; text-shadow:0 0 5px #00f2ff; font-size:20px; }
+  .card p { color:#ccc; font-size:14px; }
+  .features ul { list-style:none; padding-left:20px; }
+  .features li { margin-bottom:10px; position:relative; padding-left:20px; }
+  .features li::before {
+    content:"✔"; position:absolute; left:0; color:#00f2ff;
+  }
+  form {
+    max-width:500px; margin:0 auto;
+    display:flex; flex-direction:column; gap:15px;
+  }
+  input,textarea {
+    padding:12px; border:none; border-radius:8px;
+    background:rgba(255,255,255,0.1); color:#fff; resize:none;
+  }
+  input::placeholder,textarea::placeholder { color:#ccc; }
+  button.send {
+    width:100%; padding:14px; background:#00f2ff; border:none;
+    color:#000; font-weight:bold; border-radius:8px; cursor:pointer;
+    transition:0.3s;
+  }
+  button.send:hover { background:#00e0ff; }
+  footer { text-align:center; color:#888; padding:25px 0; font-size:14px; }
+  /* Mobil ayarları */
+  @media(max-width:600px){
+    .hero h2 { font-size:28px; }
+    .hero p { font-size:16px; }
+    .btn { font-size:13px; padding:10px 18px; }
+    header { flex-direction:column; align-items:flex-start; }
+  }
+</style>
 </head>
 <body>
+  <div id="rain"></div>
+  <div id="flash"></div>
 
-<header>
-  <h1>KortexBOT</h1>
-  <nav>
-    <a href="#">Ana Sayfa</a>
-    <a href="#">Komutlar</a>
-    <a href="#">Premium</a>
-    <a href="#">Giriş</a>
-  </nav>
-</header>
+  <header>
+    <h1>KortexBOT</h1>
+    <nav>
+      <a href="#">Ana Sayfa</a><a href="#">Komutlar</a><a href="#">Premium</a><a href="#">İletişim</a>
+    </nav>
+  </header>
 
-<section class="hero">
-  <h2>Discord için ihtiyacın olan tek botla tanış!</h2>
-  <p>KortexBOT ile sunucunuzu özelleştirin, koruyun ve geliştirerek fark yaratın.</p>
-  <div class="buttons">
-    <a href="#" class="btn discord">Discord'a Ekle</a>
-    <a href="#" class="btn panel">Kontrol Paneli</a>
+  <div class="container">
+    <div class="hero section">
+      <h2>Discord için İhtiyacın Olan Tek Bot</h2>
+      <p>KortexBOT ile sunucunu özelleştir, koru ve harika bir topluluk oluştur.</p>
+      <div class="buttons">
+        <a href="#" class="btn discord">Discord’a Ekle</a>
+        <a href="#" class="btn panel">Kontrol Paneli</a>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="card-grid">
+        <div class="card"><h3>Özelleştirilebilir🏷</h3><p>Kontrol paneliyle komut ve ayarları kolayca özelleştir.</p></div>
+        <div class="card"><h3>Güvenlik💪</h3><p>Anti-spam, şüpheli kullanıcı algılama ve ban sistemiyle sunucunu koru.</p></div>
+        <div class="card"><h3>Rol Menüsü🎭</h3><p>Emoji veya butonla rol sistemi kur sunucuna etkileşim kat.</p></div>
+        <div class="card"><h3>Moderasyon🛡️</h3><p>Kelime filtresi, link koruması, reklam engelleme gibi özellikler.</p></div>
+      </div>
+    </div>
+
+    <div class="section features">
+      <h2>Öne Çıkan Özellikler</h2>
+      <ul>
+        <li>Kullanıcı dostu kontrol paneli</li>
+        <li>Hızlı ve stabil API</li>
+        <li>Detaylı log sistemi</li>
+        <li>7/24 destek</li>
+      </ul>
+    </div>
+
+    <div class="section contact">
+      <h2>İletişim Kur</h2>
+      <form>
+        <input type="text" placeholder="Adınız" required>
+        <input type="email" placeholder="Email adresiniz" required>
+        <textarea rows="4" placeholder="Mesajınız"></textarea>
+        <button type="submit" class="send">Gönder</button>
+      </form>
+    </div>
   </div>
-</section>
 
-<section class="section">
-  <div class="card-grid">
-    <div class="card">
-      <h3>Özelleştirilebilir Sistemler</h3>
-      <p>Moderatörlük, denetim kaydı, otomatik cevaplar ve çok daha fazlası ile sunucunuza hayat verin.</p>
-    </div>
-    <div class="card">
-      <h3>Üst Düzey Güvenlik</h3>
-      <p>Hesap limiti, şüpheli kullanıcı algılama ve daha fazlasıyla güvenliği üst seviyeye taşıyın.</p>
-    </div>
-    <div class="card">
-      <h3>Emoji Rol Sistemi</h3>
-      <p>Kullanıcılar emojiye tıklayarak istedikleri rolleri alabilir. Kolay, şık ve etkileşimli!</p>
-    </div>
-    <div class="card">
-      <h3>Otomatik Moderasyon</h3>
-      <p>Spam, küfür ve reklam filtreleriyle sunucunuzu tertemiz tutun.</p>
-    </div>
-  </div>
-</section>
-
-<footer>
-  © 2025 KortexBOT. Tüm hakları saklıdır.
-</footer>
-
+  <footer>
+    © 2025 KortexBOT. Tüm hakları saklıdır.
+  </footer>
 </body>
-  </html>
+</html>
