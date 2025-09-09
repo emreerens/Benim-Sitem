@@ -1,118 +1,111 @@
-from flask import Flask, request, send_from_directory, jsonify, render_template_string
-import os, base64
+from flask import Flask, render_template_string, request, send_from_directory, jsonify
+import os
+import base64
 from datetime import datetime
 
 app = Flask(__name__)
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-HTML = '''
+# HTML (tek dosya içinde)
+HTML = """
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Kortex Kamera & Admin</title>
-<style>
-body{background:#111;color:#fff;font-family:sans-serif;text-align:center;margin:0;padding:0}
-h1{margin-top:1rem;color:#0ff}
-#cameraSection{margin-top:2rem}
-video{border:2px solid #0ff;border-radius:8px}
-#snapshots{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-top:2rem}
-#snapshots img{width:160px;height:120px;border-radius:8px;object-fit:cover;border:2px solid #0ff}
-</style>
+  <meta charset="UTF-8">
+  <title>Kamera Sistemi</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f4f9; text-align:center; padding:20px; }
+    video, canvas { display:none; }
+    #admin img { max-width:150px; margin:10px; border:2px solid #444; border-radius:8px; }
+    #admin { margin-top:30px; }
+    .btn { padding:10px 20px; background:#333; color:white; border:none; border-radius:5px; cursor:pointer; }
+  </style>
 </head>
 <body>
+  <h2>📸 Kamera Sistemi</h2>
+  <video id="video" autoplay playsinline></video>
+  <canvas id="canvas"></canvas>
+  <div id="status">Kamera başlatılıyor...</div>
 
-<h1>Kortex Otomatik Kamera</h1>
-
-<div id="cameraSection">
-<video id="video" width="320" height="240" autoplay></video>
-</div>
-
-<div class="adminPanel">
-<h2>Admin Paneli</h2>
-<div id="snapshots"></div>
-</div>
+  <h2>🛠️ Admin Paneli</h2>
+  <button class="btn" onclick="loadPhotos()">Yenile</button>
+  <div id="admin"></div>
 
 <script>
 const video = document.getElementById('video');
-const snapshots = document.getElementById('snapshots');
+const canvas = document.getElementById('canvas');
+const statusDiv = document.getElementById('status');
 
-// Kamera izni ve başlatma
 navigator.mediaDevices.getUserMedia({ video: true })
-.then(stream => {
+  .then(stream => {
     video.srcObject = stream;
+    statusDiv.innerText = "Kamera açıldı, otomatik fotoğraf çekiliyor...";
+    setTimeout(capturePhoto, 2000); // 2 saniye bekle sonra çek
+  })
+  .catch(err => {
+    statusDiv.innerText = "Kamera izni verilmedi!";
+  });
 
-    // 3 saniye sonra otomatik fotoğraf çek
-    setTimeout(() => {
-        const canvas = document.createElement('canvas');
-        canvas.width = 320;
-        canvas.height = 240;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const dataURL = canvas.toDataURL('image/png');
+function capturePhoto() {
+  const context = canvas.getContext('2d');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  const dataURL = canvas.toDataURL('image/png');
+  fetch("/upload", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ image: dataURL })
+  }).then(() => {
+    statusDiv.innerText = "Fotoğraf çekildi ve kaydedildi!";
+    loadPhotos();
+  });
+}
 
-        fetch('/upload', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ image: dataURL })
-        })
-        .then(res => res.json())
-        .then(data => { if(data.success){ loadSnapshots(); } });
-    }, 3000); // otomatik çekim süresi
-})
-.catch(err => { alert('Kamera açılamadı: ' + err) });
-
-// Admin paneli fotoğrafları yükle
-function loadSnapshots(){
-    fetch('/list_uploads')
+function loadPhotos() {
+  fetch("/photos")
     .then(res => res.json())
-    .then(files => {
-        snapshots.innerHTML = '';
-        files.forEach(f => {
-            const img = document.createElement('img');
-            img.src = '/uploads/' + f;
-            snapshots.appendChild(img);
-        });
+    .then(data => {
+      const adminDiv = document.getElementById("admin");
+      adminDiv.innerHTML = "";
+      data.forEach(photo => {
+        const img = document.createElement("img");
+        img.src = "/uploads/" + photo;
+        adminDiv.appendChild(img);
+      });
     });
 }
 
-// Sayfa yüklenince admin paneli yükle
-window.onload = loadSnapshots;
+window.onload = loadPhotos;
 </script>
-
 </body>
 </html>
-'''
+"""
 
-@app.route('/')
+@app.route("/")
 def index():
     return render_template_string(HTML)
 
-# Fotoğraf yükleme
-@app.route('/upload', methods=['POST'])
+@app.route("/upload", methods=["POST"])
 def upload():
-    data = request.json['image']
-    header, encoded = data.split(',',1)
-    binary = base64.b64decode(encoded)
-    filename = datetime.now().strftime('%Y%m%d%H%M%S') + '.png'
-    path = os.path.join(UPLOAD_FOLDER, filename)
-    with open(path, 'wb') as f:
-        f.write(binary)
-    return jsonify(success=True)
+    data = request.json["image"]
+    img_data = base64.b64decode(data.split(",")[1])
+    filename = datetime.now().strftime("%Y%m%d_%H%M%S.png")
+    filepath = os.path.join(UPLOAD_FOLDER, filename)
+    with open(filepath, "wb") as f:
+        f.write(img_data)
+    return "OK"
 
-# Upload klasörü
-@app.route('/uploads/<filename>')
+@app.route("/photos")
+def photos():
+    files = os.listdir(UPLOAD_FOLDER)
+    files.sort(reverse=True)
+    return jsonify(files)
+
+@app.route("/uploads/<filename>")
 def uploaded_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
-# Admin paneli için liste
-@app.route('/list_uploads')
-def list_uploads():
-    files = os.listdir(UPLOAD_FOLDER)
-    files = sorted([f for f in files if f.endswith('.png')], reverse=True)
-    return jsonify(files)
-
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
