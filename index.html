@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zero Reklam</title>
     <style>
+        /* Genel Sayfa Stilleri */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+
         /* Kayıt Ekranı Stil */
         #signup-container {
             background: #ff6f61;
@@ -44,7 +52,7 @@
             background: #e76f51;
         }
 
-        /* Ana Sayfa */
+        /* Ana Sayfa Stil */
         #main-page {
             display: none;
             background: url('lava-background.gif') no-repeat center center fixed;
@@ -52,6 +60,7 @@
             color: white;
             min-height: 100vh;
             padding-top: 20px;
+            height: 100vh;
         }
 
         #header {
@@ -69,24 +78,39 @@
             display: flex;
             justify-content: space-around;
             flex-wrap: wrap;
+            margin-top: 50px;
         }
 
         .channel {
             background: rgba(0, 0, 0, 0.7);
             padding: 20px;
             border-radius: 8px;
-            width: 200px;
+            width: 250px;
             text-align: center;
             margin: 10px;
         }
 
         .channel h2 {
             color: #f4a261;
+            font-size: 1.5rem;
         }
 
         .channel p {
             color: white;
             font-size: 1rem;
+        }
+
+        /* Responsive tasarım */
+        @media (max-width: 768px) {
+            #channels {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .channel {
+                width: 80%;
+                margin-bottom: 20px;
+            }
         }
     </style>
 </head>
