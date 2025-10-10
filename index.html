@@ -5,50 +5,172 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Reklam Sunucusu</title>
-    <link rel="stylesheet" href="styles.css"> <!-- CSS dosyası eklenecek -->
+    <style>
+        /* Genel Stil */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        /* LED Ambians Giriş Ekranı */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: linear-gradient(45deg, #ff0099, #493240);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .login-container input {
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+            margin: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            width: 80%;
+            font-size: 18px;
+        }
+
+        .login-container button {
+            background: #ff0099;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            margin-top: 15px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background 0.3s;
+        }
+
+        .login-container button:hover {
+            background: #ff66b3;
+        }
+
+        /* Ana Sayfa Stil */
+        .main-container {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #222;
+            position: relative;
+        }
+
+        /* Reklam Alanları */
+        .ad-slot {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 2px solid #fff;
+            padding: 15px;
+            border-radius: 10px;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .top-left {
+            top: 10px;
+            left: 10px;
+        }
+
+        .top-right {
+            top: 10px;
+            right: 10px;
+        }
+
+        .bottom-left {
+            bottom: 10px;
+            left: 10px;
+        }
+
+        .bottom-right {
+            bottom: 10px;
+            right: 10px;
+        }
+
+        /* Geçiş Animasyonu */
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Reklam Yönetim Paneli</h1>
-        <nav>
-            <ul>
-                <li><a href="#">Ana Sayfa</a></li>
-                <li><a href="#">Reklam Ekle</a></li>
-                <li><a href="#">Reklamları Görüntüle</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <section class="add-ad">
-        <h2>Yeni Reklam Ekle</h2>
-        <form action="submit_ad.php" method="POST" enctype="multipart/form-data">
-            <label for="adTitle">Reklam Başlığı:</label>
-            <input type="text" id="adTitle" name="adTitle" required>
+    <!-- Giriş Ekranı -->
+    <div class="login-container" id="loginScreen">
+        <h2>Giriş Yap</h2>
+        <input type="text" id="username" placeholder="Kullanıcı Adı" required>
+        <input type="password" id="password" placeholder="Şifre" required>
+        <button onclick="login()">Giriş Yap</button>
+    </div>
 
-            <label for="adImage">Reklam Görseli:</label>
-            <input type="file" id="adImage" name="adImage" accept="image/*" required>
-
-            <label for="adLink">Reklam Linki:</label>
-            <input type="url" id="adLink" name="adLink" required>
-
-            <button type="submit">Reklam Ekle</button>
-        </form>
-    </section>
-
-    <section class="ads-display">
-        <h2>Reklamlar</h2>
-        <div class="ad">
-            <img src="ad1.jpg" alt="Reklam 1">
-            <a href="https://example.com" target="_blank">Reklam 1 Linki</a>
+    <!-- Ana Sayfa -->
+    <div class="main-container" id="mainPage">
+        <div class="ad-slot top-left fade-in" id="adTopLeft">
+            <p>Reklam 1</p>
         </div>
-        <div class="ad">
-            <img src="ad2.jpg" alt="Reklam 2">
-            <a href="https://example.com" target="_blank">Reklam 2 Linki</a>
+        <div class="ad-slot top-right fade-in" id="adTopRight">
+            <p>Reklam 2</p>
         </div>
-    </section>
+        <div class="ad-slot bottom-left fade-in" id="adBottomLeft">
+            <p>Reklam 3</p>
+        </div>
+        <div class="ad-slot bottom-right fade-in" id="adBottomRight">
+            <p>Reklam 4</p>
+        </div>
+    </div>
 
-    <footer>
-        <p>&copy; 2025 Reklam Sunucusu. Tüm hakları saklıdır.</p>
-    </footer>
+    <script>
+        // Kullanıcı Girişi
+        function login() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            // Basit kullanıcı doğrulama (gerçek bir backend ile değiştirilebilir)
+            if (username === "admin" && password === "1234") {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainPage').style.display = 'flex';
+            } else {
+                alert("Kullanıcı adı veya şifre hatalı.");
+            }
+        }
+
+        // Reklamları dinamik olarak değiştirebilirsiniz
+        setTimeout(() => {
+            document.getElementById('adTopLeft').innerHTML = '<p>Yeni Reklam 1</p>';
+            document.getElementById('adTopRight').innerHTML = '<p>Yeni Reklam 2</p>';
+            document.getElementById('adBottomLeft').innerHTML = '<p>Yeni Reklam 3</p>';
+            document.getElementById('adBottomRight').innerHTML = '<p>Yeni Reklam 4</p>';
+        }, 5000); // 5 saniye sonra reklamlar değişecek
+    </script>
+
 </body>
 </html>
