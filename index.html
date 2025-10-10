@@ -1,111 +1,54 @@
-from flask import Flask, render_template_string, request, send_from_directory, jsonify
-import os
-import base64
-from datetime import datetime
-
-app = Flask(__name__)
-UPLOAD_FOLDER = "uploads"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-# HTML (tek dosya içinde)
-HTML = """
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>Kamera Sistemi</title>
-  <style>
-    body { font-family: Arial, sans-serif; background:#f4f4f9; text-align:center; padding:20px; }
-    video, canvas { display:none; }
-    #admin img { max-width:150px; margin:10px; border:2px solid #444; border-radius:8px; }
-    #admin { margin-top:30px; }
-    .btn { padding:10px 20px; background:#333; color:white; border:none; border-radius:5px; cursor:pointer; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Reklam Sunucusu</title>
+    <link rel="stylesheet" href="styles.css"> <!-- CSS dosyası eklenecek -->
 </head>
 <body>
-  <h2>📸 Kamera Sistemi</h2>
-  <video id="video" autoplay playsinline></video>
-  <canvas id="canvas"></canvas>
-  <div id="status">Kamera başlatılıyor...</div>
+    <header>
+        <h1>Reklam Yönetim Paneli</h1>
+        <nav>
+            <ul>
+                <li><a href="#">Ana Sayfa</a></li>
+                <li><a href="#">Reklam Ekle</a></li>
+                <li><a href="#">Reklamları Görüntüle</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <h2>🛠️ Admin Paneli</h2>
-  <button class="btn" onclick="loadPhotos()">Yenile</button>
-  <div id="admin"></div>
+    <section class="add-ad">
+        <h2>Yeni Reklam Ekle</h2>
+        <form action="submit_ad.php" method="POST" enctype="multipart/form-data">
+            <label for="adTitle">Reklam Başlığı:</label>
+            <input type="text" id="adTitle" name="adTitle" required>
 
-<script>
-const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
-const statusDiv = document.getElementById('status');
+            <label for="adImage">Reklam Görseli:</label>
+            <input type="file" id="adImage" name="adImage" accept="image/*" required>
 
-navigator.mediaDevices.getUserMedia({ video: true })
-  .then(stream => {
-    video.srcObject = stream;
-    statusDiv.innerText = "Kamera açıldı, otomatik fotoğraf çekiliyor...";
-    setTimeout(capturePhoto, 2000); // 2 saniye bekle sonra çek
-  })
-  .catch(err => {
-    statusDiv.innerText = "Kamera izni verilmedi!";
-  });
+            <label for="adLink">Reklam Linki:</label>
+            <input type="url" id="adLink" name="adLink" required>
 
-function capturePhoto() {
-  const context = canvas.getContext('2d');
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  context.drawImage(video, 0, 0, canvas.width, canvas.height);
-  const dataURL = canvas.toDataURL('image/png');
-  fetch("/upload", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ image: dataURL })
-  }).then(() => {
-    statusDiv.innerText = "Fotoğraf çekildi ve kaydedildi!";
-    loadPhotos();
-  });
-}
+            <button type="submit">Reklam Ekle</button>
+        </form>
+    </section>
 
-function loadPhotos() {
-  fetch("/photos")
-    .then(res => res.json())
-    .then(data => {
-      const adminDiv = document.getElementById("admin");
-      adminDiv.innerHTML = "";
-      data.forEach(photo => {
-        const img = document.createElement("img");
-        img.src = "/uploads/" + photo;
-        adminDiv.appendChild(img);
-      });
-    });
-}
+    <section class="ads-display">
+        <h2>Reklamlar</h2>
+        <div class="ad">
+            <img src="ad1.jpg" alt="Reklam 1">
+            <a href="https://example.com" target="_blank">Reklam 1 Linki</a>
+        </div>
+        <div class="ad">
+            <img src="ad2.jpg" alt="Reklam 2">
+            <a href="https://example.com" target="_blank">Reklam 2 Linki</a>
+        </div>
+    </section>
 
-window.onload = loadPhotos;
-</script>
+    <footer>
+        <p>&copy; 2025 Reklam Sunucusu. Tüm hakları saklıdır.</p>
+    </footer>
 </body>
 </html>
-"""
-
-@app.route("/")
-def index():
-    return render_template_string(HTML)
-
-@app.route("/upload", methods=["POST"])
-def upload():
-    data = request.json["image"]
-    img_data = base64.b64decode(data.split(",")[1])
-    filename = datetime.now().strftime("%Y%m%d_%H%M%S.png")
-    filepath = os.path.join(UPLOAD_FOLDER, filename)
-    with open(filepath, "wb") as f:
-        f.write(img_data)
-    return "OK"
-
-@app.route("/photos")
-def photos():
-    files = os.listdir(UPLOAD_FOLDER)
-    files.sort(reverse=True)
-    return jsonify(files)
-
-@app.route("/uploads/<filename>")
-def uploaded_file(filename):
-    return send_from_directory(UPLOAD_FOLDER, filename)
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
