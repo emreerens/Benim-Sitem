@@ -1,173 +1,510 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zero Reklam</title>
-    <style>
-        /* Genel Sayfa Stilleri */
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: Arial, sans-serif;
-        }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Orman Dükkanı - Demo</title>
+<style>
+  :root{
+    --bg-image: url('forest-bg.jpg'); /* arka plan resmini buraya koy: forest-bg.jpg */
+    --overlay-dark: rgba(2,8,20,0.65);
+    --neon-1: #6ef2ff;
+    --neon-2: #ff6ef2;
+    --neon-3: #8cff6e;
+    --text: #e9f5ff;
+    --accent: #ffd580;
+    --glass: rgba(255,255,255,0.04);
+    --glass-2: rgba(255,255,255,0.06);
+    --blur: 8px;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
 
-        /* Kayıt Ekranı Stil */
-        #signup-container {
-            background: #ff6f61;
-            color: white;
-            padding: 50px;
-            text-align: center;
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+  html,body{height:100%;margin:0;background:#001219;color:var(--text);-webkit-font-smoothing:antialiased}
+  .site {
+    position:relative;
+    min-height:100vh;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    box-sizing:border-box;
+    background-image: var(--bg-image);
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+  }
 
-        #signup-container h1 {
-            margin-bottom: 20px;
-            font-size: 2.5rem;
-        }
+  /* koyu overlay + blur efekti */
+  .overlay {
+    position:absolute;inset:0;
+    background:linear-gradient(180deg,var(--overlay-dark), rgba(0,0,0,0.75));
+    backdrop-filter: blur(6px);
+    z-index:0;
+  }
 
-        #signup-form input {
-            padding: 10px;
-            margin: 10px 0;
-            width: 250px;
-            border: none;
-            border-radius: 5px;
-        }
+  /* Foreground container */
+  .ui {
+    position:relative;
+    z-index:5;
+    width:100%;
+    max-width:1200px;
+    margin:0 auto;
+    display:flex;
+    gap:20px;
+    align-items:flex-start;
+  }
 
-        #signup-form button {
-            padding: 10px 20px;
-            background: #f4a261;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
+  /* Sol: kamp ateşi + oturma alanı (gösterim amaçlı) */
+  .left {
+    flex:0 0 320px;
+    min-width:240px;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    align-items:center;
+    text-align:center;
+  }
 
-        #signup-form button:hover {
-            background: #e76f51;
-        }
+  .camp-area {
+    width:260px;height:260px;border-radius:16px;
+    background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45));
+    box-shadow: 0 6px 30px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+    border:1px solid rgba(255,255,255,0.03);
+    position:relative; overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+  }
 
-        /* Ana Sayfa Stil */
-        #main-page {
-            display: none;
-            background: url('lava-background.gif') no-repeat center center fixed;
-            background-size: cover;
-            color: white;
-            min-height: 100vh;
-            padding-top: 20px;
-            height: 100vh;
-        }
+  .camp-area canvas{position:absolute;left:0;top:0;width:100%;height:100%}
 
-        #header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+  .sitting {
+    display:flex;gap:8px;flex-wrap:wrap;justify-content:center;
+    margin-top:8px; color:var(--text); font-size:14px;
+  }
 
-        #header h1 {
-            font-size: 3rem;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-        }
+  /* Sağ: ürün bölümü */
+  .right {
+    flex:1 1 auto;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
 
-        #channels {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            margin-top: 50px;
-        }
+  header.appbar {
+    display:flex;align-items:center;justify-content:space-between;
+    gap:12px;padding:12px 16px;border-radius:12px;
+    background: linear-gradient(180deg,var(--glass), var(--glass-2));
+    border:1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    backdrop-filter: blur(var(--blur));
+  }
 
-        .channel {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 8px;
-            width: 250px;
-            text-align: center;
-            margin: 10px;
-        }
+  .brand {
+    display:flex;gap:12px;align-items:center;
+  }
+  .brand .logo {
+    width:48px;height:48px;border-radius:10px;
+    background:linear-gradient(135deg,var(--neon-3), #2a7d3b);
+    display:flex;align-items:center;justify-content:center;font-weight:700;color:#042;
+    box-shadow: 0 0 18px rgba(140,255,110,0.08), 0 6px 20px rgba(0,0,0,0.5);
+  }
+  .brand h1{margin:0;font-size:18px;letter-spacing:0.4px}
+  .brand p{margin:0;font-size:12px;color:rgba(255,255,255,0.7)}
 
-        .channel h2 {
-            color: #f4a261;
-            font-size: 1.5rem;
-        }
+  .actions {display:flex;gap:10px;align-items:center}
+  .btn {
+    padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.05);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    color:var(--text);cursor:pointer;font-weight:600;font-size:13px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.45);
+  }
 
-        .channel p {
-            color: white;
-            font-size: 1rem;
-        }
+  /* Grid of product boxes */
+  .grid {
+    display:grid;
+    grid-template-columns: repeat(3,1fr);
+    gap:14px;
+  }
+  .card {
+    position:relative;
+    padding:14px;border-radius:12px;min-height:120px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.03);
+    box-shadow: 0 8px 26px rgba(0,0,0,0.55);
+    overflow:visible;
+    display:flex;flex-direction:column;gap:10px;
+  }
 
-        /* Responsive tasarım */
-        @media (max-width: 768px) {
-            #channels {
-                flex-direction: column;
-                align-items: center;
-            }
+  /* neon frame */
+  .neon-frame {
+    position:absolute;inset:8px;border-radius:10px;pointer-events:none;
+    box-shadow: 0 0 28px rgba(110,242,255,0.06);
+    border:2px solid rgba(255,255,255,0.02);
+  }
+  .neon-frame:before{
+    content:"";position:absolute;inset:-2px;border-radius:10px;
+    background: linear-gradient(90deg,var(--neon-1), var(--neon-2), var(--neon-3));
+    filter:blur(8px);opacity:0.65;mix-blend-mode:screen;
+    -webkit-mask: linear-gradient(#000,#000) content-box, #000;
+    mask: linear-gradient(#000,#000) content-box, #000;
+    padding:2px;
+  }
 
-            .channel {
-                width: 80%;
-                margin-bottom: 20px;
-            }
-        }
-    </style>
+  .card h3{margin:0;font-size:15px}
+  .card p{margin:0;font-size:13px;color:rgba(255,255,255,0.78)}
+  .price {margin-top:auto;font-weight:700;color:var(--accent)}
+
+  /* featured bar */
+  .featured {
+    padding:12px;border-radius:12px;background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.03);display:flex;gap:12px;align-items:center;
+  }
+
+  .featured .tag {font-size:13px;font-weight:700;color:var(--neon-1)}
+  .featured .desc {font-size:13px;color:rgba(255,255,255,0.8)}
+
+  /* daily discount modal */
+  .modal {
+    position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:24px;z-index:9999;
+    background:linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.8));
+  }
+  .modal .panel {
+    width:min(940px,95%);max-height:86vh;overflow:auto;border-radius:14px;padding:18px;background:linear-gradient(180deg, rgba(8,12,20,0.96), rgba(2,6,12,0.96));
+    border:1px solid rgba(255,255,255,0.04);box-shadow:0 30px 80px rgba(0,0,0,0.7);
+  }
+  .close-btn {float:right;cursor:pointer;padding:6px 10px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.03)}
+
+  /* small-screen responsiveness */
+  @media (max-width:900px){
+    .ui{flex-direction:column-reverse;align-items:stretch}
+    .left{order:2;flex:0 0 auto;width:100%}
+    .right{order:1}
+    .grid { grid-template-columns: repeat(2,1fr); }
+  }
+  @media (max-width:520px){
+    .grid { grid-template-columns: 1fr; }
+    .left{display:flex;flex-direction:row;justify-content:space-between;padding:6px}
+    header.appbar{flex-direction:column;align-items:flex-start;gap:10px}
+  }
+
+  /* moving leaves: visual sparkle */
+  .leaf {
+    position:absolute;width:10px;height:22px;background:linear-gradient(180deg,#2a7d3b,#163c27);
+    opacity:0.7;border-radius:4px;transform-origin:center;
+    filter: blur(0.4px);
+  }
+  /* subtle info at bottom-left */
+  .hint {position:fixed;left:18px;bottom:18px;color:rgba(255,255,255,0.65);font-size:13px;z-index:7}
+</style>
 </head>
 <body>
-    <!-- Kayıt Ekranı -->
-    <div id="signup-container">
-        <h1>Zero Reklam - Kayıt Ol</h1>
-        <form id="signup-form">
-            <input type="text" id="username" placeholder="Kullanıcı Adı" required>
-            <input type="email" id="email" placeholder="E-posta" required>
-            <input type="password" id="password" placeholder="Şifre" required>
-            <button type="submit">Kayıt Ol</button>
-        </form>
+  <div class="site" id="site">
+    <div class="overlay"></div>
+
+    <!-- animated canvas for stars & leaves (z-index 1) -->
+    <canvas id="fx" style="position:absolute;inset:0;z-index:1;pointer-events:none"></canvas>
+
+    <div class="ui" role="main" aria-label="Orman Dükkanı Arayüzü">
+      <div class="left">
+        <div class="camp-area" aria-hidden="true">
+          <canvas id="campfire"></canvas>
+        </div>
+        <div class="sitting">
+          <div style="font-weight:700">Orman Dükkanı</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.65)">Günlük indirimler ve el ilanları</div>
+        </div>
+      </div>
+
+      <div class="right">
+        <header class="appbar">
+          <div class="brand">
+            <div class="logo">OD</div>
+            <div>
+              <h1>Orman Dükkanı</h1>
+              <p>Günlük indirimler, öne çıkan ürünler</p>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn" id="openDiscount">Günlük İndirimler</button>
+            <button class="btn">Ürün Ekle</button>
+            <button class="btn">Giriş</button>
+          </div>
+        </header>
+
+        <div class="featured">
+          <div class="tag">Öne Çıkan</div>
+          <div class="desc">Kamp ateşi favorileri — sınırlı stok!</div>
+        </div>
+
+        <div class="grid" id="productGrid">
+          <!-- sample cards -->
+          <div class="card">
+            <div class="neon-frame"></div>
+            <h3>Gece Termosu</h3>
+            <p>Sıcak çay için çift cidarlı termo. Kamp dostu.</p>
+            <div class="price">₺199 — %20</div>
+          </div>
+
+          <div class="card">
+            <div class="neon-frame"></div>
+            <h3>El yapımı Bıçak</h3>
+            <p>Dayanıklı, küçük kamp bıçağı. El üretimi.</p>
+            <div class="price">₺349 — %15</div>
+          </div>
+
+          <div class="card">
+            <div class="neon-frame"></div>
+            <h3>Yıldız Lambası</h3>
+            <p>LED yıldız projektörü — gece ambiyansı.</p>
+            <div class="price">₺129 — %25</div>
+          </div>
+
+          <div class="card">
+            <div class="neon-frame"></div>
+            <h3>Kamp Matı</h3>
+            <p>Konforlu, hafif ve katlanabilir.</p>
+            <div class="price">₺89 — %10</div>
+          </div>
+
+          <div class="card">
+            <div class="neon-frame"></div>
+            <h3>Ahşap Kaşık Seti</h3>
+            <p>Doğal ahşaptan 4 parçalık set.</p>
+            <div class="price">₺59 — %30</div>
+          </div>
+
+          <div class="card">
+            <div class="neon-frame"></div>
+            <h3>Çadır Işıkları</h3>
+            <p>USB şarjlı askılı LED serisi.</p>
+            <div class="price">₺79 — %18</div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Ana Sayfa -->
-    <div id="main-page" style="display:none;">
-        <div id="header">
-            <h1>Zero Reklam</h1>
+    <div class="hint">Mobil için duyarlı düzen — kutucuklar neon çerçeveli</div>
+
+    <!-- modal: günlük indirimler -->
+    <div class="modal" id="modal">
+      <div class="panel" role="dialog" aria-modal="true" aria-label="Günlük İndirimler">
+        <button class="close-btn" id="closeModal">Kapat ✕</button>
+        <h2 style="margin-top:6px">Orman Dükkanı — Günün İndirimleri</h2>
+        <p style="color:rgba(255,255,255,0.75)">Burada günlük indirimli ürünler, hızlı satın al ve sat bölümleri olacak. Örnek:</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px">
+          <div style="padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03)">
+            <h3 style="margin:0">Gece Termosu</h3>
+            <p style="margin:6px 0 0;color:rgba(255,255,255,0.75)">%20 indirim - stok sınırlı</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+              <strong>₺199</strong>
+              <button class="btn">Satın Al</button>
+            </div>
+          </div>
+
+          <div style="padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03)">
+            <h3 style="margin:0">Yıldız Lambası</h3>
+            <p style="margin:6px 0 0;color:rgba(255,255,255,0.75)">%25 indirim</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+              <strong>₺129</strong>
+              <button class="btn">Satın Al</button>
+            </div>
+          </div>
+
+          <div style="padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03)">
+            <h3 style="margin:0">Ahşap Kaşık Seti</h3>
+            <p style="margin:6px 0 0;color:rgba(255,255,255,0.75)">%30 indirim</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+              <strong>₺59</strong>
+              <button class="btn">Satın Al</button>
+            </div>
+          </div>
+
         </div>
-        <div id="channels">
-            <div class="channel">
-                <h2>Gelişmiş Kanal 1</h2>
-                <p>Reklam Alanı</p>
-            </div>
-            <div class="channel">
-                <h2>Gelişmiş Kanal 2</h2>
-                <p>Reklam Alanı</p>
-            </div>
-            <div class="channel">
-                <h2>Gelişmiş Kanal 3</h2>
-                <p>Reklam Alanı</p>
-            </div>
-        </div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // Kayıt formunu kontrol et
-        document.getElementById('signup-form').addEventListener('submit', function(event) {
-            event.preventDefault();
+<script>
+/* ---------- responsive canvas setup ---------- */
+const fx = document.getElementById('fx');
+const camp = document.getElementById('campfire');
+const resizeCanvases = ()=>{
+  fx.width = innerWidth * devicePixelRatio;
+  fx.height = innerHeight * devicePixelRatio;
+  fx.style.width = innerWidth + 'px';
+  fx.style.height = innerHeight + 'px';
+  camp.width = camp.clientWidth * devicePixelRatio;
+  camp.height = camp.clientHeight * devicePixelRatio;
+  camp.style.width = camp.clientWidth + 'px';
+  camp.style.height = camp.clientHeight + 'px';
+};
+resizeCanvases();
+addEventListener('resize', resizeCanvases);
 
-            // Form verilerini al
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+/* ---------- stars and leaves layer (fx) ---------- */
+const fctx = fx.getContext('2d');
+let stars = [], leaves = [];
+const createScene = ()=>{
+  stars = [];
+  leaves = [];
+  const starCount = Math.floor((innerWidth+innerHeight)/40);
+  for(let i=0;i<starCount;i++){
+    stars.push({
+      x: Math.random()*fx.width,
+      y: Math.random()*fx.height*0.6,
+      r: (Math.random()*1.6+0.2)*devicePixelRatio,
+      a: Math.random(),
+      twinkle: Math.random()*0.02+0.005
+    });
+  }
+  // leaves
+  for(let i=0;i<20;i++){
+    leaves.push({
+      x: Math.random()*fx.width,
+      y: Math.random()*fx.height,
+      w: 8*devicePixelRatio,
+      h: 18*devicePixelRatio,
+      rot: Math.random()*Math.PI*2,
+      speed: Math.random()*0.2+0.05,
+      sway: Math.random()*0.8+0.2
+    });
+  }
+};
+createScene();
 
-            if (username && email && password) {
-                // Kayıt başarılı
-                alert('Kayıt Başarılı!');
-                
-                // Kayıt ekranını gizle, ana sayfayı göster
-                document.getElementById('signup-container').style.display = 'none';
-                document.getElementById('main-page').style.display = 'block';
-            } else {
-                alert('Lütfen tüm alanları doldurun!');
-            }
-        });
-    </script>
+/* animate fx */
+let last=0;
+function anim(t){
+  const dt = (t-last)*0.001;
+  last=t;
+  fctx.clearRect(0,0,fx.width,fx.height);
+  // stars
+  for(let s of stars){
+    s.a += s.twinkle*(Math.random()>0.5?1:-1);
+    if(s.a<0.2) s.a=0.2;
+    if(s.a>1) s.a=1;
+    fctx.beginPath();
+    const grad = fctx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r*4);
+    grad.addColorStop(0, 'rgba(255,255,255,'+ (0.9*s.a) +')');
+    grad.addColorStop(0.5, 'rgba(174,222,255,'+ (0.25*s.a) +')');
+    grad.addColorStop(1, 'rgba(174,222,255,0)');
+    fctx.fillStyle = grad;
+    fctx.arc(s.x, s.y, s.r*4, 0, Math.PI*2);
+    fctx.fill();
+  }
+  // leaves floating
+  for(let l of leaves){
+    l.y += l.speed * (10*devicePixelRatio) * dt;
+    l.x += Math.sin((l.y/100 + l.sway)) * 0.8 * devicePixelRatio;
+    l.rot += 0.02;
+    if(l.y > fx.height + 40*devicePixelRatio){
+      l.y = -40*devicePixelRatio;
+      l.x = Math.random()*fx.width;
+    }
+    fctx.save();
+    fctx.translate(l.x, l.y);
+    fctx.rotate(Math.sin(l.rot)*0.7);
+    fctx.fillStyle = 'rgba(66,120,60,0.75)';
+    fctx.fillRect(-l.w/2, -l.h/2, l.w, l.h);
+    fctx.restore();
+  }
+
+  requestAnimationFrame(anim);
+}
+requestAnimationFrame(anim);
+
+/* ---------- simple campfire particle system ---------- */
+const cctx = camp.getContext('2d');
+let particles = [];
+function spawnParticle(){
+  const w = camp.width; const h = camp.height;
+  const baseX = w/2 + (Math.random()-0.5)*40*devicePixelRatio;
+  particles.push({
+    x: baseX,
+    y: h * 0.75,
+    vx: (Math.random()-0.5)*0.6*devicePixelRatio,
+    vy: -(Math.random()*1.6+1.6)*devicePixelRatio,
+    life: Math.random()*0.8+0.8,
+    size: Math.random()*6*devicePixelRatio+4*devicePixelRatio,
+    t:0,
+    colorPhase: Math.random()
+  });
+}
+let lastCamp = 0;
+function campAnim(t){
+  const dt = (t-lastCamp)*0.001;
+  lastCamp = t;
+  cctx.clearRect(0,0,camp.width,camp.height);
+
+  // spawn
+  for(let i=0;i<6;i++){
+    if(Math.random()<0.25) spawnParticle();
+  }
+
+  for(let i=particles.length-1;i>=0;i--){
+    const p = particles[i];
+    p.t += dt;
+    if(p.t > p.life){ particles.splice(i,1); continue; }
+    p.x += p.vx;
+    p.y += p.vy + (p.t*0.3*devicePixelRatio);
+    // draw glow
+    const lifeProgress = 1 - p.t/p.life;
+    const size = p.size * (0.6 + 0.8*lifeProgress);
+    // color from yellow->red->smoke
+    const r = Math.floor(255 * (0.9*lifeProgress + 0.1));
+    const g = Math.floor(120 * (lifeProgress));
+    const b = Math.floor(40 * (lifeProgress*0.3));
+    const alpha = 0.85 * lifeProgress;
+    const grad = cctx.createRadialGradient(p.x,p.y,0,p.x,p.y,size*3);
+    grad.addColorStop(0, `rgba(${r},${g},${b},${alpha})`);
+    grad.addColorStop(0.5, `rgba(${r},${g},${b},${alpha*0.25})`);
+    grad.addColorStop(1, `rgba(60,60,60,0)`);
+    cctx.fillStyle = grad;
+    cctx.beginPath();
+    cctx.arc(p.x, p.y, size*2,0,Math.PI*2);
+    cctx.fill();
+  }
+
+  // draw logs silhouette
+  cctx.fillStyle = 'rgba(20,12,6,0.75)';
+  const hh = camp.height;
+  cctx.fillRect(camp.width*0.35, hh*0.78, camp.width*0.3, hh*0.08);
+  cctx.fillStyle = 'rgba(40,30,20,0.6)';
+  cctx.fillRect(camp.width*0.33, hh*0.82, camp.width*0.34, hh*0.04);
+
+  requestAnimationFrame(campAnim);
+}
+requestAnimationFrame(campAnim);
+
+/* ---------- modal open/close ---------- */
+const modal = document.getElementById('modal');
+document.getElementById('openDiscount').addEventListener('click', ()=>{ modal.style.display='flex'; });
+document.getElementById('closeModal').addEventListener('click', ()=>{ modal.style.display='none'; });
+modal.addEventListener('click', (e)=>{ if(e.target===modal) modal.style.display='none'; });
+
+/* ---------- small niceties: keyboard close ---------- */
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ modal.style.display='none'; } });
+
+/* ---------- accessibility hint: focus trap simple (light) ---------- */
+document.querySelectorAll('.btn').forEach(b=>{
+  b.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter') b.click();
+  })
+});
+
+/* ---------- optional: if background image missing, fallback gradient ---------- */
+const site = document.getElementById('site');
+const img = getComputedStyle(site).getPropertyValue('--bg-image').trim();
+(function checkBG(){
+  // try to preload
+  const url = img.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
+  if(!url) return;
+  const imgObj = new Image();
+  imgObj.onload = ()=>{/* ok */}
+  imgObj.onerror = ()=>{ site.style.backgroundImage = 'linear-gradient(180deg,#001219,#071026)'; }
+  imgObj.src = url;
+})();
+</script>
 </body>
 </html>
