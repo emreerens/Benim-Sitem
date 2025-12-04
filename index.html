@@ -1,153 +1,83 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Night Forest Store</title>
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: Poppins, sans-serif;
-        background: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1920&q=80') no-repeat center/cover;
-        height: 100vh;
-        overflow-x: hidden;
-        color: #fff;
-        backdrop-filter: blur(5px);
-    }
-
-    .overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.55);
-        backdrop-filter: blur(3px);
-        z-index: 1;
-    }
-
-    .container {
-        z-index: 2;
-        position: relative;
-        max-width: 1400px;
-        margin: 60px auto;
-        padding: 20px;
-    }
-
-    .title {
-        text-align: center;
-        font-size: 45px;
-        font-weight: 700;
-        text-shadow: 0 0 10px #fff;
-        margin-bottom: 35px;
-    }
-
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 25px;
-    }
-
-    .card {
-        background: rgba(255, 255, 255, 0.12);
-        border-radius: 18px;
-        padding: 20px;
-        border: 1px solid rgba(255, 255, 255, .25);
-        backdrop-filter: blur(10px);
-        transition: .25s;
-        cursor: pointer;
-        box-shadow: 0 0 25px rgba(255,255,255,0.08);
-    }
-
-    .card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 0 30px rgba(255,255,255,0.25);
-    }
-
-    .item-name {
-        font-size: 22px;
-        font-weight: 600;
-        margin-bottom: 10px;
-        text-shadow: 0 0 8px #fff;
-    }
-
-    .item-price {
-        font-size: 18px;
-        opacity: .85;
-    }
-
-    /* Mobil uyum */
-    @media (max-width: 1000px) {
-        .grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-        .title {
-            font-size: 32px;
-        }
-    }
-
-    @media (max-width: 600px) {
-        .grid {
-            grid-template-columns: 1fr;
-        }
-        .title {
-            font-size: 26px;
-        }
-        body {
-            height: auto;
-        }
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gece Karavanı - Menü</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-
 <body>
-<div class="overlay"></div>
 
-<div class="container">
-    <div class="title">Gecenin Ormanı - Ürünler</div>
+    <div class="container">
+        
+        <header>
+            <h1>🌜 Gece Karavanı Lezzetleri</h1>
+            <div class="cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cart-count">0</span>
+            </div>
+        </header>
 
-    <div class="grid">
+        <main class="menu">
+            <h2>Özel Kamp Menüsü</h2>
 
-        <div class="card">
-            <div class="item-name">Latte</div>
-            <div class="item-price">20₺</div>
-        </div>
+            <div class="product-list" id="product-list">
+                
+                <div class="product-card" data-id="1" data-price="35" data-name="Peynirli Jumbo">
+                    <i class="fas fa-coffee"></i> <h3>Peynirli Jumbo</h3>
+                    <p class="discount">Lans. -20% İNDİRİM</p>
+                    <p class="price">35 TL</p>
+                    <button class="add-to-cart">Sepete Ekle</button>
+                </div>
 
-        <div class="card">
-            <div class="item-name">Mocha</div>
-            <div class="item-price">25₺</div>
-        </div>
+                <div class="product-card" data-id="2" data-price="45" data-name="Burger Combo">
+                    <i class="fas fa-burger"></i>
+                    <h3>Burger Combo</h3>
+                    <p class="free-offer">1 ALANA 1 BEDAVA</p>
+                    <p class="price">45 TL</p>
+                    <button class="add-to-cart">Sepete Ekle</button>
+                </div>
+                
+                <div class="product-card" data-id="3" data-price="40" data-name="Füme Jumbo">
+                    <i class="fas fa-mug-hot"></i>
+                    <h3>Füme Jumbo</h3>
+                    <p class="discount">Lans. -30% İNDİRİM</p>
+                    <p class="price">40 TL</p>
+                    <button class="add-to-cart">Sepete Ekle</button>
+                </div>
+                
+                <div class="product-card" data-id="4" data-price="30" data-name="Sucuklu Tost">
+                    <i class="fas fa-sandwich"></i>
+                    <h3>Sucuklu Tost</h3>
+                    <p class="discount">Lans. -30% İNDİRİM</p>
+                    <p class="price">30 TL</p>
+                    <button class="add-to-cart">Sepete Ekle</button>
+                </div>
+                
+                <div class="product-card" data-id="5" data-price="55" data-name="Izgara Köfte">
+                    <i class="fas fa-steak"></i>
+                    <h3>Izgara Köfte</h3>
+                    <p class="price">55 TL</p>
+                    <button class="add-to-cart">Sepete Ekle</button>
+                </div>
 
-        <div class="card">
-            <div class="item-name">Sıcak Çikolata</div>
-            <div class="item-price">28₺</div>
-        </div>
+                </div>
+        </main>
 
-        <div class="card">
-            <div class="item-name">Filtre Kahve</div>
-            <div class="item-price">22₺</div>
-        </div>
-
-        <div class="card">
-            <div class="item-name">Hamburger</div>
-            <div class="item-price">65₺</div>
-        </div>
-
-        <div class="card">
-            <div class="item-name">Cheeseburger</div>
-            <div class="item-price">70₺</div>
-        </div>
-
-        <div class="card">
-            <div class="item-name">Patates Kızartması</div>
-            <div class="item-price">30₺</div>
-        </div>
-
-        <div class="card">
-            <div class="item-name">Soğuk Latte</div>
-            <div class="item-price">24₺</div>
+        <div class="cart-modal" id="cart-modal">
+            <div class="modal-content">
+                <h3>Sepetiniz</h3>
+                <ul id="cart-items">
+                    </ul>
+                <p>Toplam: <span id="cart-total">0 TL</span></p>
+                <button id="close-cart">Kapat</button>
+                <button id="checkout">Siparişi Tamamla</button>
+            </div>
         </div>
 
     </div>
-</div>
 
+    <script src="app.js"></script> 
 </body>
 </html>
